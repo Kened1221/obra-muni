@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import Map, { NavigationControl, ViewState } from "react-map-gl";
-import LocationObras from "./location-works";
+import LocationObras from "../views/location-works";
 
 interface obra {
   id: string;

@@ -2,7 +2,7 @@ import CalendarCustom from "@/components/views/calendar-custom";
 import ImageWork from "@/components/views/image-work";
 import { useState } from "react";
 
-interface imgs {
+interface Imgs {
   id: string;
   url: string;
   latitud: string | null;
@@ -11,13 +11,19 @@ interface imgs {
   date: string;
 }
 
+interface LocationObra {
+  projectType: string;
+  points: [number, number][];
+}
+
 interface ImagesContainerProps {
-  imgs: imgs[] | null;
+  imgs: Imgs[] | null;
+  coordinates: LocationObra | null;
 }
 
 const today = new Date().toISOString().split("T")[0];
 
-function ImagesContainer({ imgs }: ImagesContainerProps) {
+function ImagesContainer({ imgs, coordinates }: ImagesContainerProps) {
   const [day, setDay] = useState<string>(today);
 
   const dayT =
@@ -26,7 +32,11 @@ function ImagesContainer({ imgs }: ImagesContainerProps) {
       .filter((date): date is string => date !== null) ?? [];
 
   const onlyDay =
-    imgs?.filter((result) => result.date === day + "T00:00") ?? [];
+    imgs?.filter((result) => {
+      const resultDate = result.date.split("T")[0];
+      const targetDay = day.split("T")[0];
+      return resultDate === targetDay;
+    }) ?? [];
 
   return (
     <div className="grid grid-rows-2 h-full w-full gap-y-4">
@@ -34,7 +44,7 @@ function ImagesContainer({ imgs }: ImagesContainerProps) {
         <CalendarCustom Daysworked={dayT} setDay={setDay} />
       </div>
       <div className="rounded-3xl bg-white dark:bg-gray-800 shadow-lg overflow-y-auto">
-        <ImageWork imgs={onlyDay} />
+        <ImageWork imgs={onlyDay} coordinates={coordinates} />
       </div>
     </div>
   );

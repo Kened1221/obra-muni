@@ -50,17 +50,24 @@ function Page() {
     fetchData();
   }, [id]);
 
+  const coordenadasobra = obra
+    ? {
+        projectType: obra.projectType,
+        points: obra.points,
+      }
+    : null;
+
   if (!obra)
     return (
       <div className="text-center text-cyan-900 dark:text-teal-400 font-semibold">
         Cargando...
       </div>
     );
-
+  
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 h-full w-full gap-4">
       <div className="h-full">
-        <ImagesContainer imgs={img} />
+        <ImagesContainer imgs={img} coordinates={coordenadasobra}/>
       </div>
       <div className="h-full">
         <DetallesContainer obraDetalles={obra} />

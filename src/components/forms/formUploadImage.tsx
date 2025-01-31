@@ -143,7 +143,7 @@ export default function FormImage({ record, setModal }: UploadImagesProps) {
       </div>
 
       <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
-        <CalendarForm fecha={setFecha} type="anterior"/>
+        <CalendarForm fecha={setFecha} type="anterior" />
         <DragDropImgInput img={editedImg} setImg={setEditedImg} />
       </div>
 

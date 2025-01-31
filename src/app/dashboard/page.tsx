@@ -3,7 +3,7 @@
 "use client";
 
 import { totalObrasRegistradas } from "@/actions/obras-actions";
-import CustomMap from "@/components/views/custom-map";
+import CustomMap from "@/components/maps/custom-map";
 import SideDashboard from "@/components/views/side-dashboard";
 import { useEffect, useState } from "react";
 
@@ -15,8 +15,8 @@ interface UserLocation {
 function Page() {
   const [queryResult, setQueryResult] = useState<any[]>([]);
   const [defaultLocation, setDefaultLocation] = useState<UserLocation>({
-    latitude: -13.160441,
-    longitude: -74.225832,
+    latitude: -12.619648,
+    longitude: -73.789429,
   });
 
   useEffect(() => {

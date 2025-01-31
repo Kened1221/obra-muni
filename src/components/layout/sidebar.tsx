@@ -7,7 +7,7 @@ import AvatarUser from "./avatar-user";
 function Sidebar() {
   return (
     <div className="flex flex-col justify-between items-center px-3 py-4 h-full border-r bg-card">
-      <Link href={'/dashboard'}>
+      <Link href={'/dashboard'} className="py-6">
         <Image 
           src='/logos/barra_claro.png' 
           alt="logo_claro" 

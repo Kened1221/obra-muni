@@ -10,7 +10,7 @@ import { ConfirmDialog } from "@/components/dialog/dialog-confirm";
 import { Combobox } from "@/components/select/combobox";
 import medidaTotal from "@/utils/measureWork";
 
-interface ObrasProps {
+interface ObraProps {
   nombre: string;
   codigo_CUI: string;
   nombre_resident: string;
@@ -24,7 +24,7 @@ interface OptionProps {
 }
 
 interface ObrasContainerProps {
-  obras: ObrasProps[];
+  obras: ObraProps[];
 }
 
 function ObrasContainer({ obras }: ObrasContainerProps) {

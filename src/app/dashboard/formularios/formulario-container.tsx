@@ -110,7 +110,7 @@ export function FormularioContainer() {
   }
 
   return (
-    <div className="w-full max-w-2xl h-full mx-auto">
+    <div className="flex w-full max-w-2xl h-full mx-auto items-center">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleOpenConfirmationModal)}
@@ -238,7 +238,7 @@ export function FormularioContainer() {
 
           <div className="flex justify-center py-5">
             <Button
-              className="w-full bg-blue-900 hover:bg-blue-600"
+              className="w-full"
               type="submit"
               disabled={isSubmitting}
             >

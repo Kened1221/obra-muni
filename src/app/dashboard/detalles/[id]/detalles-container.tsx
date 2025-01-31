@@ -1,5 +1,5 @@
 import DescriptionWork from "@/components/views/description-work";
-import MapDrawingPolygon from "@/components/views/map-drawing-polygon";
+import MapDrawingPolygon from "@/components/maps/map-drawing-polygon";
 
 interface obra {
   id: string;

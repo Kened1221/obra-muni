@@ -13,12 +13,13 @@ import Map, {
 import ButtonBack from "../buttons/dynamic/icons-back";
 import ButtonSave from "../buttons/dynamic/icons-save";
 import ButtonClose from "../buttons/dynamic/button-backII";
-import Radio from "./option-figura";
+
 import { ActualizarObra } from "@/actions/details-action";
 import toasterCustom from "../toaster-custom";
 import { TbPointFilled } from "react-icons/tb";
 import { ConfirmDialog } from "../dialog/dialog-confirm";
 import medidaTotal from "@/utils/measureWork";
+import Radio from "../views/option-figura";
 
 interface Obra {
   id: string;
