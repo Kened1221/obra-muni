@@ -18,6 +18,7 @@ export async function totalObrasRegistradas() {
       propietario_id: obra.propietario_id,
       resident: obra.resident,
       projectType: obra.projectType,
+      obraType: obra.obraType,
       cui: obra.cui,
       name: obra.name,
       areaOrLength: obra.areaOrLength,
@@ -65,6 +66,7 @@ export async function getProyectos() {
 export async function guardarObra(
   resident: string,
   projectType: string,
+  obraType: string,
   cui: string,
   name: string,
   points: [number, number][],
@@ -79,6 +81,7 @@ export async function guardarObra(
         propietario_id,
         resident,
         projectType,
+        obraType,
         cui,
         name,
         areaOrLength,
