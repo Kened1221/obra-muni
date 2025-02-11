@@ -29,7 +29,7 @@ export async function totalObrasRegistradas() {
       points: obra.points ? JSON.parse(obra.points) : null,
     }));
   } catch (error) {
-    console.error("Error al buscar obras:");
+    console.error("Error al buscar obras:", error);
     return [];
   }
 }
