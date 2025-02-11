@@ -36,7 +36,7 @@ export async function getCooImg() {
     });
 
     const propietarioCount = imagesToday.reduce(
-      (acc: { [key: string]: number }, image: any) => {
+      (acc: { [key: string]: number }, image) => {
         const { propietario_id } = image;
         acc[propietario_id] = (acc[propietario_id] || 0) + 1;
         return acc;
@@ -44,7 +44,7 @@ export async function getCooImg() {
       {}
     );
 
-    const result = coordinatesToday.map((coord: any) => {
+    const result = coordinatesToday.map((coord) => {
       const count = propietarioCount[coord.propietario_id] || 0;
       return {
         propietario_id: coord.propietario_id,
