@@ -12,7 +12,11 @@ export async function totalObrasRegistradas() {
       },
     });
 
-    return result.map((obra: any) => ({
+    if (!result || !Array.isArray(result)) {
+      throw new Error("No se encontraron registros en la base de datos.");
+    }
+
+    return result.map((obra) => ({
       id: obra.id,
       state: obra.state,
       propietario_id: obra.propietario_id,
@@ -22,13 +26,14 @@ export async function totalObrasRegistradas() {
       cui: obra.cui,
       name: obra.name,
       areaOrLength: obra.areaOrLength,
-      points: JSON.parse(obra.points),
+      points: obra.points ? JSON.parse(obra.points) : null,
     }));
   } catch (error) {
-    console.error("Error al buscar obras:", error);
+    console.error("Error al buscar obras:");
     return [];
   }
 }
+
 
 export async function getProyectos() {
   try {
@@ -75,6 +80,7 @@ export async function guardarObra(
   fechaFinal: Date
 ) {
   try {
+
     await prisma.coordinates.create({
       data: {
         state: "Ejecucion",

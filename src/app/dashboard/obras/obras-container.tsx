@@ -84,7 +84,7 @@ function ObrasContainer({ obras }: ObrasContainerProps) {
     }
 
     try {
-      if (!obraSeleccionada || !points || !areaOrLength) {
+      if (!obraSeleccionada || !points || !areaOrLength || !obraType) {
         toasterCustom(400, "Por favor complete todos los campos requeridos.");
         return;
       }

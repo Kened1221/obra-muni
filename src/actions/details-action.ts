@@ -35,6 +35,7 @@ export async function obtenerDetalles(id: string) {
       areaOrLength: obraEncontrada.areaOrLength,
       resident: obraEncontrada.resident,
       projectType: obraEncontrada.projectType,
+      obraType: obraEncontrada.obraType,
       propietario_id: obraEncontrada.propietario_id,
       fechaFinal: (() => {
         const date = new Date(obraEncontrada.fechaFinal);

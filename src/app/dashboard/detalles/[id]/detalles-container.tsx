@@ -7,6 +7,7 @@ interface obra {
   propietario_id: string;
   resident: string;
   projectType: string;
+  obraType: string,
   cui: string;
   name: string;
   areaOrLength: string;
@@ -16,7 +17,7 @@ interface obra {
 }
 
 function DetallesContainer({ obraDetalles }: { obraDetalles: obra }) {
-  
+
   const mapDetails = {
     id: obraDetalles.id,
     state: obraDetalles.state,
@@ -32,6 +33,7 @@ function DetallesContainer({ obraDetalles }: { obraDetalles: obra }) {
     areaOrLength: obraDetalles.areaOrLength,
     resident: obraDetalles.resident,
     projectType: obraDetalles.projectType,
+    obraType: obraDetalles.obraType,
     propietario_id: obraDetalles.propietario_id,
     fechaFinal: obraDetalles.fechaFinal,
     porcentaje: obraDetalles.porcentaje,

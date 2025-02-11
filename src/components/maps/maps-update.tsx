@@ -71,8 +71,7 @@ function MapsUpdate({ obra, coordinates, setModal }: obraUpdateProps) {
       if (points.length < (projectType === "Superficie" ? 3 : 2)) {
         toasterCustom(
           400,
-          `Se requieren al menos ${
-            projectType === "Superficie" ? 3 : 2
+          `Se requieren al menos ${projectType === "Superficie" ? 3 : 2
           } puntos.`
         );
         return;

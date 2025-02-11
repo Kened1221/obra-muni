@@ -133,7 +133,7 @@ export default function UpdateResidentContainer({
                 name="id_propietario"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>ID del Propietario:</FormLabel>
+                    <FormLabel>ID del Residente:</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="ID del propietario"

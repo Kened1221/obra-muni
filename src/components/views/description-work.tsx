@@ -29,6 +29,7 @@ interface obra {
   propietario_id: string;
   resident: string;
   projectType: string;
+  obraType: string;
   cui: string;
   name: string;
   areaOrLength: string;
@@ -80,7 +81,7 @@ function DescriptionWork({ obra }: { obra: obra }) {
         <div className="flex items-center space-x-3 text-gray-700 dark:text-gray-300">
           <FaCogs className="text-lg text-blue-500" />
           <p className="font-medium">Tipo de Proyecto:</p>
-          <span>{obra.projectType}</span>
+          <span>{obra.obraType}</span>
         </div>
 
         <div className="flex items-center space-x-3 text-gray-700 dark:text-gray-300">

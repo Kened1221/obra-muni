@@ -32,41 +32,41 @@ function MapLocationDeatils({
   const layerConfig =
     typeObra === "Polygon"
       ? {
-          id: `polygon-layer`,
-          type: "fill" as "fill",
-          paint: {
-            "fill-color": "#E27373",
-            "fill-opacity": 0.5,
-            "fill-outline-color": "#FF0000",
-          },
-        }
+        id: `polygon-layer`,
+        type: "fill" as "fill",
+        paint: {
+          "fill-color": "#F99F5B",
+          "fill-opacity": 0.5,
+          "fill-outline-color": "#F7700A",
+        },
+      }
       : {
-          id: `line-layer`,
-          type: "line" as "line",
-          paint: {
-            "line-color": "#FF0000",
-            "line-width": 5,
-          },
-        };
+        id: `line-layer`,
+        type: "line" as "line",
+        paint: {
+          "line-color": "#F7700A",
+          "line-width": 5,
+        },
+      };
 
   const geoJsonData: Feature<Polygon | LineString> | null = hasCoordinates
     ? typeObra === "Polygon"
       ? {
-          type: "Feature",
-          properties: {},
-          geometry: {
-            type: "Polygon",
-            coordinates: [coordinates.points],
-          },
-        }
+        type: "Feature",
+        properties: {},
+        geometry: {
+          type: "Polygon",
+          coordinates: [coordinates.points],
+        },
+      }
       : {
-          type: "Feature",
-          properties: {},
-          geometry: {
-            type: "LineString",
-            coordinates: coordinates.points,
-          },
-        }
+        type: "Feature",
+        properties: {},
+        geometry: {
+          type: "LineString",
+          coordinates: coordinates.points,
+        },
+      }
     : null;
 
   return (
