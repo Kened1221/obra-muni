@@ -6,7 +6,7 @@ import Link from "next/link";
 const ButtonTutorial = () => {
   return (
     <StyledWrapper>
-      <Link href="https://www.youtube.com/embed/rs1YAkfF8QM?si=ZqGCtTI1EYK4sWnI">
+      <Link href="#">
         <div>
           <button className="button">
             <FaYoutube className="icon" />
