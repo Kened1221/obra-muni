@@ -53,9 +53,9 @@ function Page() {
 
   const coordenadasobra = obra
     ? {
-        projectType: obra.projectType,
-        points: obra.points,
-      }
+      projectType: obra.projectType,
+      points: obra.points,
+    }
     : null;
 
   if (!obra)
@@ -64,11 +64,11 @@ function Page() {
         Cargando...
       </div>
     );
-  
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 h-full w-full gap-4">
       <div className="h-full">
-        <ImagesContainer imgs={img} coordinates={coordenadasobra}/>
+        <ImagesContainer imgs={img} coordinates={coordenadasobra} />
       </div>
       <div className="h-full">
         <DetallesContainer obraDetalles={obra} />
