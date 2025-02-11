@@ -72,6 +72,7 @@ export async function guardarImg(
         url,
         propietario_id,
         date: new Date(fecha),
+        
       },
     });
 
