@@ -42,7 +42,7 @@ function Page() {
         setObra(data);
 
         if (data && data.propietario_id) {
-          const imgs = await getDaysWorked(data.propietario_id);
+          const imgs = await getDaysWorked(data.propietario_id, data.cui);
           setImg(imgs);
         }
       }

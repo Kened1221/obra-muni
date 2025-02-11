@@ -98,6 +98,7 @@ model Image {
   latitud        String?
   longitud       String?
   propietario_id String
+  cui            String
   date           DateTime
 
   createdAt DateTime @default(now())
