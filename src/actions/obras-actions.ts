@@ -37,6 +37,7 @@ export async function totalObrasRegistradas() {
 
 export async function getProyectos() {
   try {
+    
     const result = await prisma.project.findMany();
 
     const coordinates = await prisma.coordinates.findMany({
@@ -54,7 +55,7 @@ export async function getProyectos() {
     );
 
     const obrasRegistradas = missingProjects.map((resul: any) => ({
-      nombre: resul.nombreObra,
+      nombre: resul.nameObra,
       codigo_CUI: resul.cui,
       nombre_resident: resul.resident,
       propietario_id: resul.propietarioId,

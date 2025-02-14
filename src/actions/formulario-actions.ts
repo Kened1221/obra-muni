@@ -13,7 +13,7 @@ export async function crearProyecto(proyecto: {
     await prisma.project.create({
       data: {
         cui: proyecto.cui,
-        nombreObra: proyecto.nombreObra,
+        nameObra: proyecto.nombreObra,
         resident: proyecto.resident,
         propietarioId: proyecto.propietarioId,
         dateFinal: proyecto.fecha,

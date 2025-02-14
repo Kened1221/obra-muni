@@ -32,7 +32,7 @@ function ObrasContainer({ obras }: ObrasContainerProps) {
   const [obraType, setObraType] = useState<string>("");
   const [points, setPoints] = useState<[number, number][]>([]);
   const [projectType, setProjectType] = useState<string>("");
-  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [showConfirmationModal, setShowConfirmationModal] = useState<boolean>(false);
 
   const options: OptionProps[] = useMemo(
     () => obras.map((obra) => ({ value: obra.codigo_CUI, label: obra.nombre })),

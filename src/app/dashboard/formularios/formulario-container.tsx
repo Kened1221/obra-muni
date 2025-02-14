@@ -252,9 +252,9 @@ export function FormularioContainer() {
         isOpen={showConfirmationModal}
         onClose={handleCloseConfirmationModal}
         onConfirm={handleConfirmSave}
-        title="¿Estás seguro de guardar esta inforamción?"
+        title="¿Estás seguro de guardar esta información?"
         description="La información no podrá ser modificada"
-        styleButton="bg-blue-900 hover:bg-blue-600"
+        styleButton="bg-red-500 hover:bg-red-600"
       />
     </div>
   );

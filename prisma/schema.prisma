@@ -83,7 +83,7 @@ model Project {
   id String @id @default(cuid())
 
   cui           String
-  nombreObra    String
+  nameObra    String
   resident      String
   propietarioId String
   dateFinal     DateTime
