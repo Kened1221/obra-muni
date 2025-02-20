@@ -7,7 +7,6 @@ import {
   FaChartArea,
   FaHeartbeat,
   FaHeartBroken,
-  FaUserEdit,
   FaCalendarAlt,
 } from "react-icons/fa";
 
@@ -20,7 +19,6 @@ import { useState } from "react";
 import { ConfirmDialog } from "../dialog/dialog-confirm";
 import * as motion from "motion/react-client";
 import { FinalizarObra } from "@/actions/details-action";
-import UpdateResidentContainer from "./update-resident";
 import CalendarObra from "./update-calendarObra";
 
 interface obra {
@@ -38,16 +36,12 @@ interface obra {
 }
 
 function DescriptionWork({ obra }: { obra: obra }) {
-  const [modalU, setModalU] = useState<boolean>(false);
   const [showConfirmationModalF, setShowConfirmationModalF] =
     useState<boolean>(false);
   const [modalFecha, setModalFecha] = useState<boolean>(false);
 
   const router = useRouter();
 
-  const handleUpdateResident = () => {
-    setModalU(true);
-  };
   const handlemensajeFinalizar = () => {
     setShowConfirmationModalF(true);
   };
@@ -143,15 +137,6 @@ function DescriptionWork({ obra }: { obra: obra }) {
           </p>
         </div>
         <div className="flex justify-center items-center space-x-6 py-4">
-          {obra.state === "Ejecucion" && (
-            <Button
-              className="bg-[#03BB85] hover:bg-[#67DDBD]"
-              onClick={handleUpdateResident}
-            >
-              <FaUserEdit /> Nuevo Residente
-            </Button>
-          )}
-
           {obra.porcentaje === 100 ||
             (obra.state !== "Ejecucion" && (
               <Button
@@ -163,12 +148,6 @@ function DescriptionWork({ obra }: { obra: obra }) {
             ))}
         </div>
       </div>
-
-      {modalU && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <UpdateResidentContainer obra={obra} setModalU={setModalU} />
-        </div>
-      )}
 
       {modalFecha && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

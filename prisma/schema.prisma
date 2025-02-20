@@ -1,5 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// Este es tu archivo de esquema de Prisma
+// Aprende más en: https://pris.ly/d/prisma-schema
 
 generator client {
   provider = "prisma-client-js"
@@ -10,63 +10,44 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Tablas de usuarios, sesiones, roles y permisos
-
+// Modelo de Usuarios
 model User {
   id            String    @id @default(cuid())
   name          String?
   email         String?   @unique
   emailVerified DateTime?
   image         String?
+  role          String
   user          String    @unique
   password      String
-  sessions      Session[]
+
+  sessions        Session[]
+  notifications   NotificationUser[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model UserPhone {
-  id             String    @id @default(cuid())
-  name           String?
-  email          String?   @unique
-  emailVerified  DateTime?
-  image          String?
-  propietario_id String
-  user           String    @unique
-  cui            String
-  state          String
-  password       String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
+// Modelo de Sesiones
 model Session {
   id           String   @id @default(uuid())
   sessionToken String   @unique
   userId       String
   expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model VerificationToken {
-  identifier String
-  token      String
-  expires    DateTime
-
-  @@unique([identifier, token])
-}
-
+// Modelo de Coordenadas (Obras)
 model Coordinates {
-  id String @id @default(cuid())
-
+  id             String   @id @default(cuid())
   state          String
-  propietario_id String
-  resident       String
+  propietario_id String?
+  resident       String?
+  supervisor     String?
   projectType    String
   obraType       String
   cui            String
@@ -75,23 +56,13 @@ model Coordinates {
   points         String
   fechaFinal     DateTime
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Project {
-  id String @id @default(cuid())
-
-  cui           String
-  nameObra    String
-  resident      String
-  propietarioId String
-  dateFinal     DateTime
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
+
+// Modelo de Imágenes
 model Image {
   id             String   @id @default(cuid())
   url            String
@@ -101,18 +72,33 @@ model Image {
   cui            String
   date           DateTime
 
+  coordinatesId String
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
+// Modelo de Notificaciones
 model Notification {
   id          String @id @default(cuid())
-  UserID      String
   title       String
   description String
   status      String
   priority    String
 
+  notificationUsers NotificationUser[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+// Relación Muchos a Muchos: Usuario - Notificaciones
+model NotificationUser {
+  userId         String
+  notificationId String
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  notification Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+
+  @@id([userId, notificationId])
 }

@@ -21,8 +21,12 @@ function LoginContainer() {
 
   // Obtener el callbackUrl solo en el cliente
   useEffect(() => {
-    const callbackUrlParam = new URLSearchParams(window.location.search).get("callbackUrl");
-    setCallbackUrl(callbackUrlParam === "/" ? "/dashboard" : callbackUrlParam || "/dashboard");
+    const callbackUrlParam = new URLSearchParams(window.location.search).get(
+      "callbackUrl"
+    );
+    setCallbackUrl(
+      callbackUrlParam === "/" ? "/dashboard" : callbackUrlParam || "/dashboard"
+    );
   }, []);
 
   // Si ya hay sesión activa, redirigir al usuario automáticamente
@@ -38,7 +42,7 @@ function LoginContainer() {
 
     // Verifica si la respuesta es exitosa y redirige
     if (res.success) {
-      setResApi({ status: 200, message: "Login correcto, redirigiendo ..." });
+      setResApi({ status: 200, message: "Inicio correcto, redirigiendo ..." });
       // Esperar un breve tiempo para asegurar que las cookies se guarden
       setTimeout(() => {
         router.push(callbackUrl);
@@ -57,7 +61,13 @@ function LoginContainer() {
     );
   }
 
-  return <SignIn onSubmit={onSubmit} serverError={resApi?.message} status={resApi?.status} />;
+  return (
+    <SignIn
+      onSubmit={onSubmit}
+      serverError={resApi?.message}
+      status={resApi?.status}
+    />
+  );
 }
 
 export default LoginContainer;

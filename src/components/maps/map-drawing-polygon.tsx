@@ -5,9 +5,6 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import Map, { NavigationControl, Source, Layer } from "react-map-gl";
 import { Feature, Polygon, LineString } from "geojson";
 import { useState } from "react";
-import { Button } from "../buttons/button";
-import { FaPencilRuler } from "react-icons/fa";
-import MapsUpdate from "./maps-update";
 import calculateHalfwayPoint from "@/utils/midPoint";
 
 interface obra {
@@ -21,8 +18,6 @@ function CustomMap({ obra }: { obra: obra }) {
   const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
   const [styleLoaded, setStyleLoaded] = useState<boolean>(false);
-
-  const [Modal, setModal] = useState<boolean>(false);
 
   const centroid = calculateHalfwayPoint(obra.points, obra.projectType);
 
@@ -71,22 +66,8 @@ function CustomMap({ obra }: { obra: obra }) {
     setStyleLoaded(true);
   };
 
-  const handModal = () => {
-    setModal(true);
-  };
-
   return (
     <div className="relative w-full h-full">
-      {obra.state === "Ejecucion" && (
-        <Button
-          className="absolute bg-green-600 hover:bg-green-500 top-4 right-4 z-10"
-          onClick={handModal}
-        >
-          <FaPencilRuler />
-          Modificar
-        </Button>
-      )}
-
       <Map
         mapboxAccessToken={token}
         initialViewState={{
@@ -116,11 +97,6 @@ function CustomMap({ obra }: { obra: obra }) {
           </>
         )}
       </Map>
-      {Modal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <MapsUpdate obra={obra} coordinates={centroid} setModal={setModal} />
-        </div>
-      )}
     </div>
   );
 }

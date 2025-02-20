@@ -1,7 +1,7 @@
 import NextAuth from "next-auth";
 
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import {prisma} from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import authConfig from "./auth.config";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
@@ -18,20 +18,22 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (user) {
         // Verificar que user.id no sea undefined
         if (user.id) {
-          token.id = user.id;  // Asignar solo si user.id es un string
+          token.id = user.id; // Asignar solo si user.id es un string
         }
+        token.role = user.role;
         token.user = user.user;
       }
       return token;
     },
     async session({ session, token }) {
       session.user.id = token.id; // Incluye el ID en la sesión
+      session.user.role = token.role; // Incluye el rol en la sesión
       session.user.user = token.user; //
       return session;
     },
-    authorized: async ({auth}) => {
-      return !!auth
-    }
+    authorized: async ({ auth }) => {
+      return !!auth;
+    },
   },
   secret: process.env.AUTH_SECRET,
   pages: {

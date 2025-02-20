@@ -75,38 +75,26 @@ export const newObraSchema = z.object({
   cui: z
     .string({ required_error: "Campo obligatorio" })
     .min(7, "El cui debe tener al menos 7 caracteres")
+    .max(9, "El cui debe tener al maximo 9 caracteres")
     .regex(/^\d+$/, "El CUI solo puede contener números"),
 
   nombreObra: z
     .string({ required_error: "Campo obligatorio" })
     .min(1, "Campo obligatorio"),
-
-  apellidoPaterno: z
-    .string({ required_error: "Campo obligatorio" })
-    .min(1, "Campo obligatorio"),
-
-  apellidoMaterno: z
-    .string({ required_error: "Campo obligatorio" })
-    .min(1, "Campo obligatorio"),
-
-  nombreResidente: z
-    .string({ required_error: "Campo obligatorio" })
-    .min(1, "Campo obligatorio"),
-
-  propietarioId: z
-    .string({ required_error: "Campo obligatorio" })
-    .min(8, "El cui debe tener al menos 8 caracteres")
-    .regex(/^\d+$/, "El CUI solo puede contener números"),
 });
+
 
 // Esquema para actualizar al residente
 export const updateUserResidentSchema = z.object({
   id: z.string().optional(),
-  userNombre: z.string({ required_error: "El nombre del residente es obligatorio" }).min(1, "Campo obligatorio"),
-  userApellido: z.string({ required_error: "El apellido del residente es obligatorio" }).min(1, "Campo obligatorio"),
+  userNombre: z
+    .string({ required_error: "El nombre del residente es obligatorio" })
+    .min(1, "Campo obligatorio"),
+  userApellido: z
+    .string({ required_error: "El apellido del residente es obligatorio" })
+    .min(1, "Campo obligatorio"),
   id_propietario: z
-  .string({ required_error: "Campo obligatorio" })
-  .min(8, "El ID debe tener al menos 8 caracteres")
-  .regex(/^\d+$/, "El ID solo puede contener números"),
-
+    .string({ required_error: "Campo obligatorio" })
+    .min(8, "El ID debe tener al menos 8 caracteres")
+    .regex(/^\d+$/, "El ID solo puede contener números"),
 });

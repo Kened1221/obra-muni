@@ -28,26 +28,56 @@ function NewCoordinates({ setPoints, setProjectTypestyle }: NewCoordinatesProps)
   const [newPoints, setNewPoints] = useState<[number, number][]>([]);
   const [projectType, setProjectType] = useState<string>("Superficie");
 
-  const createPolygon = (points: [number, number][]): Feature<Polygon> => ({
-    type: "Feature",
-    geometry: {
-      type: "Polygon",
-      coordinates: [points.concat([points[0]])],
-    },
-    properties: {},
-  });
+  // ✅ Verifica que `points` tenga suficientes datos antes de crear geometría
+  const createPolygon = (points: [number, number][]): Feature<Polygon> => {
+    if (!points || points.length < 3) {
+      return {
+        type: "Feature",
+        geometry: {
+          type: "Polygon",
+          coordinates: [[]], // Devuelve una estructura vacía si no hay suficientes puntos
+        },
+        properties: {},
+      };
+    }
+    return {
+      type: "Feature",
+      geometry: {
+        type: "Polygon",
+        coordinates: [points.concat([points[0]])],
+      },
+      properties: {},
+    };
+  };
 
-  const createLine = (points: [number, number][]): Feature<LineString> => ({
-    type: "Feature",
-    geometry: {
-      type: "LineString",
-      coordinates: points,
-    },
-    properties: {},
-  });
+  const createLine = (points: [number, number][]): Feature<LineString> => {
+    if (!points || points.length < 2) {
+      return {
+        type: "Feature",
+        geometry: {
+          type: "LineString",
+          coordinates: [],
+        },
+        properties: {},
+      };
+    }
+    return {
+      type: "Feature",
+      geometry: {
+        type: "LineString",
+        coordinates: points,
+      },
+      properties: {},
+    };
+  };
 
   const updateGeometryData = useCallback(
     (points: [number, number][]) => {
+      if (points.length === 0) {
+        setPolygonData(null);
+        setLineData(null);
+        return;
+      }
       if (projectType === "Superficie") {
         setPolygonData(createPolygon(points));
         setLineData(null);
@@ -60,13 +90,17 @@ function NewCoordinates({ setPoints, setProjectTypestyle }: NewCoordinatesProps)
   );
 
   useEffect(() => {
+    if (newPoints.length === 0) return; // Evita actualizar con datos vacíos
     updateGeometryData(newPoints);
     setPoints(newPoints);
     setProjectTypestyle(projectType);
   }, [newPoints, projectType, updateGeometryData]);
 
+  // ✅ Evita agregar datos inválidos
   const handleMapClick = useCallback((event: MapMouseEvent) => {
     const { lng, lat } = event.lngLat;
+    if (!lng || !lat) return;
+
     setNewPoints((prevPoints) => [...prevPoints, [lng, lat]]);
   }, []);
 
@@ -106,9 +140,7 @@ function NewCoordinates({ setPoints, setProjectTypestyle }: NewCoordinatesProps)
             setLocationError("La posición geográfica no está disponible");
             break;
           case error.TIMEOUT:
-            setLocationError(
-              "La solicitud de geolocalización ha superado el tiempo de espera"
-            );
+            setLocationError("La solicitud de geolocalización ha superado el tiempo de espera");
             break;
           default:
             setLocationError("Error desconocido al obtener la ubicación");
@@ -157,20 +189,17 @@ function NewCoordinates({ setPoints, setProjectTypestyle }: NewCoordinatesProps)
       </div>
 
       <div className="absolute top-4 right-4 z-10">
-        <Radio
-          projectType={projectType}
-          setProjectType={handleProjectTypeChange}
-        />
+        <Radio projectType={projectType} setProjectType={handleProjectTypeChange} />
       </div>
 
       <MapObras
         isClient={isClient}
         userLocation={userLocation}
         defaultLocation={defaultLocation}
-        newPoints={newPoints}
+        newPoints={newPoints.length > 0 ? newPoints : []}
         setNewPoints={setNewPoints}
-        polygonData={polygonData}
-        lineData={lineData}
+        polygonData={polygonData && polygonData.geometry.coordinates.length > 0 ? polygonData : null}
+        lineData={lineData && lineData.geometry.coordinates.length > 0 ? lineData : null}
         projectType={projectType}
         handleMapClick={handleMapClick}
       />

@@ -20,6 +20,7 @@ import { TbPointFilled } from "react-icons/tb";
 import { ConfirmDialog } from "../dialog/dialog-confirm";
 import medidaTotal from "@/utils/measureWork";
 import Radio from "../views/option-figura";
+import calculateHalfwayPoint from "@/utils/midPoint";
 
 interface Obra {
   id: string;
@@ -27,18 +28,13 @@ interface Obra {
   projectType: string;
 }
 
-interface Location {
-  latitude: number;
-  longitude: number;
-}
 
 interface obraUpdateProps {
   obra: Obra;
-  coordinates: Location;
   setModal: (value: boolean) => void;
 }
 
-function MapsUpdate({ obra, coordinates, setModal }: obraUpdateProps) {
+function MapsUpdate({ obra, setModal }: obraUpdateProps) {
   const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
   const [points, setPoints] = useState<[number, number][]>(obra.points);
@@ -47,6 +43,9 @@ function MapsUpdate({ obra, coordinates, setModal }: obraUpdateProps) {
   const [polygonData, setPolygonData] = useState<Feature<Polygon> | null>(null);
   const [lineData, setLineData] = useState<Feature<LineString> | null>(null);
   const [showConfirmationModal, SetShowConfirmationModal] = useState(false);
+
+  const centroid = calculateHalfwayPoint(obra.points, obra.projectType);
+  
 
   const createPolygon = (points: [number, number][]): Feature<Polygon> => ({
     type: "Feature",
@@ -163,8 +162,8 @@ function MapsUpdate({ obra, coordinates, setModal }: obraUpdateProps) {
         style={{ width: "100%", height: "100%", borderRadius: "20px" }}
         mapboxAccessToken={token}
         initialViewState={{
-          longitude: coordinates.longitude,
-          latitude: coordinates.latitude,
+          longitude: centroid.longitude,
+          latitude: centroid.latitude,
           zoom: 15,
         }}
         mapStyle={"mapbox://styles/mapbox/satellite-streets-v12"}
