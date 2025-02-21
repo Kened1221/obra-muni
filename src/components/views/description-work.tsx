@@ -7,7 +7,6 @@ import {
   FaChartArea,
   FaHeartbeat,
   FaHeartBroken,
-  FaCalendarAlt,
 } from "react-icons/fa";
 
 import { IoIosSend } from "react-icons/io";
@@ -19,13 +18,12 @@ import { useState } from "react";
 import { ConfirmDialog } from "../dialog/dialog-confirm";
 import * as motion from "motion/react-client";
 import { FinalizarObra } from "@/actions/details-action";
-import CalendarObra from "./update-calendarObra";
 
 interface obra {
   id: string;
   state: string;
-  propietario_id: string;
-  resident: string;
+  propietario_id: string | null;
+  resident: string | null;
   projectType: string;
   obraType: string;
   cui: string;
@@ -38,7 +36,6 @@ interface obra {
 function DescriptionWork({ obra }: { obra: obra }) {
   const [showConfirmationModalF, setShowConfirmationModalF] =
     useState<boolean>(false);
-  const [modalFecha, setModalFecha] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -50,13 +47,9 @@ function DescriptionWork({ obra }: { obra: obra }) {
     setShowConfirmationModalF(false);
   };
 
-  const UpdateFecha = () => {
-    setModalFecha(true);
-  };
-
   const confirmationFinalizar = async () => {
     try {
-      const response = await FinalizarObra(obra.id, obra.cui);
+      const response = await FinalizarObra(obra.id);
 
       toasterCustom(response.status, response.message);
 
@@ -126,11 +119,6 @@ function DescriptionWork({ obra }: { obra: obra }) {
             }}
             className="absolute top-0 left-0 h-full bg-green-400"
           ></motion.div>
-          {obra.state === "Ejecucion" && (
-            <div className="absolute text-rose-700 hover:text-rose-500 top-0 right-2 w-full h-full flex items-center justify-end z-20">
-              <FaCalendarAlt onClick={UpdateFecha} />
-            </div>
-          )}
 
           <p className="absolute top-0 left-0 w-full h-full flex items-center justify-center font-bold z-10">
             {obra.porcentaje} %
@@ -148,16 +136,6 @@ function DescriptionWork({ obra }: { obra: obra }) {
             ))}
         </div>
       </div>
-
-      {modalFecha && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <CalendarObra
-            id={obra.id}
-            fecha={obra.fechaFinal}
-            setModalFecha={setModalFecha}
-          />
-        </div>
-      )}
 
       <ConfirmDialog
         isOpen={showConfirmationModalF}

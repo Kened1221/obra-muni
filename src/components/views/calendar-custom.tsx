@@ -17,7 +17,12 @@ function CalendarCustom({ Daysworked, setDay }: DayProps) {
     }
   }, [selectedDate, setDay]);
 
-  const trabajadasDates = Daysworked.map((date) => new Date(date));
+  const trabajadasDates = Daysworked.map((date) => {
+    const parsedDate = new Date(date + "T00:00:00");
+    return new Date(
+      parsedDate.getTime() + parsedDate.getTimezoneOffset() * 60000
+    );
+  });
 
   return (
     <div className="grid grid-cols h-full w-full sm:p-4 gap-1 shadow-lg rounded-3xl items-center">

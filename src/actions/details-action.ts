@@ -2,7 +2,6 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import bcrypt from "bcryptjs";
 
 export async function obtenerDetalles(id: string) {
   try {
@@ -14,14 +13,16 @@ export async function obtenerDetalles(id: string) {
       return null;
     }
 
-    const tiempoTotal = obraEncontrada.fechaFinal.getTime() - obraEncontrada.createdAt.getTime();
+    const tiempoTotal =
+      obraEncontrada.fechaFinal.getTime() - obraEncontrada.createdAt.getTime();
 
-    const tiempoTranscurrido =new Date().getTime() - obraEncontrada.createdAt.getTime();
-    
+    const tiempoTranscurrido =
+      new Date().getTime() - obraEncontrada.createdAt.getTime();
+
     let porcentaje = Number(
       ((tiempoTranscurrido / tiempoTotal) * 100).toFixed(3)
     );
-    
+
     if (porcentaje >= 100) {
       porcentaje = 100;
     }
@@ -29,14 +30,15 @@ export async function obtenerDetalles(id: string) {
     const formattedObra = {
       id: obraEncontrada.id,
       state: obraEncontrada.state,
-      cui: obraEncontrada.cui,
-      name: obraEncontrada.name,
-      points: JSON.parse(obraEncontrada.points),
-      areaOrLength: obraEncontrada.areaOrLength,
+      propietario_id: obraEncontrada.propietario_id,
       resident: obraEncontrada.resident,
+      supervisor: obraEncontrada.supervisor,
       projectType: obraEncontrada.projectType,
       obraType: obraEncontrada.obraType,
-      propietario_id: obraEncontrada.propietario_id,
+      cui: obraEncontrada.cui,
+      name: obraEncontrada.name,
+      areaOrLength: obraEncontrada.areaOrLength,
+      points: JSON.parse(obraEncontrada.points),
       fechaFinal: (() => {
         const date = new Date(obraEncontrada.fechaFinal);
         date.setUTCHours(0, 0, 0, 0);
@@ -52,19 +54,12 @@ export async function obtenerDetalles(id: string) {
   }
 }
 
-export async function FinalizarObra(id: string, cui: string) {
+export async function FinalizarObra(id: string) {
   try {
     await prisma.coordinates.update({
       where: { id: id },
       data: {
         state: "Finalizado",
-      },
-    });
-
-    await prisma.userPhone.updateMany({
-      where: { cui: cui },
-      data: {
-        state: "Inactivo",
       },
     });
 
@@ -109,7 +104,6 @@ export async function ActualizarObra(
     };
   }
 }
-
 
 export async function ActualizarCalendarObra(id: string, day: Date) {
   try {

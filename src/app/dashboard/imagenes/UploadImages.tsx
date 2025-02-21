@@ -4,12 +4,13 @@ import FormImage from "@/components/forms/formUploadImage";
 import { BiSolidImageAdd } from "react-icons/bi";
 
 interface Record {
-  propietario_id: string;
-  resident: string;
+  propietario_id: string | null;
+  resident: string | null;
   cui: string;
   name: string;
   count: number;
 }
+
 
 interface UploadImagesProps {
   record: Record[];

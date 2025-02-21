@@ -2,8 +2,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { FaUser, FaUserTimes, FaUserCheck } from "react-icons/fa";
 
 interface Register {
-  propietario_id: string;
-  resident: string;
+  propietario_id: string | null;
+  resident: string | null;
   cui: string;
   name: string;
   count: number;

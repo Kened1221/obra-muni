@@ -6,23 +6,26 @@ import "next-auth/jwt";
 declare module "next-auth" {
   interface Session {
     user: {
-      id: string; // Asegúrate de incluir el ID aquí
+      id: string;
       role: string;
       user: string;
+      cui?: string; // Agregar `cui`
     } & DefaultSession["user"];
   }
 
   interface User {
-    id: string; // Asegúrate de incluir el ID aquí también
+    id: string;
     role: string;
     user: string;
+    cui?: string; // Agregar `cui`
   }
 }
 
 declare module "next-auth/jwt" {
   interface JWT {
-    id: string; // Asegúrate de incluir el ID aquí
+    id: string;
     role: string;
     user: string;
+    cui?: string; // Agregar `cui`
   }
 }

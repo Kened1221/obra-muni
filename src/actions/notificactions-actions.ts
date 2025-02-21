@@ -27,3 +27,29 @@ export async function getNotification() {
     return [];
   }
 }
+
+export async function getNotificationUser(cui: string) {
+  try {
+    const result = await prisma.notification.findMany({
+      where: { cui },
+      take: 20,
+      orderBy: {
+        updatedAt: "desc",
+      },
+    });
+
+    const resultados = result.map((resul: any) => ({
+      id: resul.id,
+      title: resul.title,
+      description: resul.description,
+      status: resul.status,
+      priority: resul.priority,
+      update: new Date(resul.updatedAt).toLocaleString(),
+    }));
+
+    return resultados;
+  } catch (error) {
+    console.error("Error en notificaciones:", error);
+    return [];
+  }
+}

@@ -11,8 +11,8 @@ import { ConfirmDialog } from "@/components/dialog/dialog-confirm";
 import { Button } from "@/components/buttons/button";
 
 interface Record {
-  propietario_id: string;
-  resident: string;
+  propietario_id: string | null;
+  resident: string | null;
   cui: string;
   name: string;
   count: number;
@@ -74,18 +74,19 @@ export default function FormImage({ record, setModal }: UploadImagesProps) {
       return;
     }
 
-    if (!obraSeleccionada?.propietario_id) {
-      toasterCustom(400, "El propietario_id no está disponible.");
-      return;
-    }
-
     try {
       await handleFileUpload(editedImg);
+      console.log(
+        `${process.env.NEXT_PUBLIC_URL}/api/uploads/${editedImg.name}`,
+        obraSeleccionada?.propietario_id ?? "",
+        obraSeleccionada!.cui,
+        fecha.toISOString()
+      );
 
       const response = await guardarImg(
         `${process.env.NEXT_PUBLIC_URL}/api/uploads/${editedImg.name}`,
-        obraSeleccionada?.propietario_id,
-        obraSeleccionada?.cui,
+        obraSeleccionada?.propietario_id ?? "",
+        obraSeleccionada!.cui,
         fecha.toISOString()
       );
 

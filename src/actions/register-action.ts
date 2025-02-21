@@ -18,7 +18,7 @@ export async function getCooImg() {
         },
       },
       select: {
-        propietario_id: true,
+        cui: true,
         date: true,
       },
     });
@@ -37,15 +37,16 @@ export async function getCooImg() {
 
     const propietarioCount = imagesToday.reduce(
       (acc: { [key: string]: number }, image) => {
-        const { propietario_id } = image;
-        acc[propietario_id] = (acc[propietario_id] || 0) + 1;
+        const propietarioKey = image.cui ?? "unknown";
+        acc[propietarioKey] = (acc[propietarioKey] || 0) + 1;
         return acc;
       },
       {}
     );
 
     const result = coordinatesToday.map((coord) => {
-      const count = propietarioCount[coord.propietario_id] || 0;
+      const propietarioKey = coord.cui ?? "unknown";
+      const count = propietarioCount[propietarioKey] || 0;
       return {
         propietario_id: coord.propietario_id,
         resident: coord.resident,
@@ -54,6 +55,7 @@ export async function getCooImg() {
         count,
       };
     });
+
     return result;
   } catch (error) {
     console.error("Error al buscar los imagenes:", error);
@@ -63,25 +65,24 @@ export async function getCooImg() {
 
 export async function guardarImg(
   url: string,
-  propietario_id: string,
+  propietario_id: string | null,
   cui: string,
   fecha: string
 ) {
   try {
-    const nuevaImagen = await prisma.image.create({
+
+    await prisma.image.create({
       data: {
         url,
         propietario_id,
         cui,
         date: new Date(fecha),
-        
       },
     });
 
     return {
       message: "La imagen se guardó con éxito",
       status: 200,
-      data: nuevaImagen,
     };
   } catch (error: unknown) {
     const errorStatus = error instanceof Error ? 500 : 400;

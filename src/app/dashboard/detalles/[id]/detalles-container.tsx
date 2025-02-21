@@ -4,10 +4,11 @@ import MapDrawingPolygon from "@/components/maps/map-drawing-polygon";
 interface obra {
   id: string;
   state: string;
-  propietario_id: string;
-  resident: string;
+  propietario_id: string | null;
+  resident: string | null;
+  supervisor: string | null;
   projectType: string;
-  obraType: string,
+  obraType: string;
   cui: string;
   name: string;
   areaOrLength: string;
@@ -17,7 +18,6 @@ interface obra {
 }
 
 function DetallesContainer({ obraDetalles }: { obraDetalles: obra }) {
-
   const mapDetails = {
     id: obraDetalles.id,
     state: obraDetalles.state,
@@ -49,6 +49,6 @@ function DetallesContainer({ obraDetalles }: { obraDetalles: obra }) {
       </div>
     </div>
   );
-};
+}
 
 export default DetallesContainer;

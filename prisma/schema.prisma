@@ -17,12 +17,12 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
+  cui           String?
   role          String
   user          String    @unique
   password      String
 
-  sessions        Session[]
-  notifications   NotificationUser[]
+  sessions Session[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -56,11 +56,9 @@ model Coordinates {
   points         String
   fechaFinal     DateTime
 
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-
 
 // Modelo de Imágenes
 model Image {
@@ -68,11 +66,9 @@ model Image {
   url            String
   latitud        String?
   longitud       String?
-  propietario_id String
+  propietario_id String?
   cui            String
   date           DateTime
-
-  coordinatesId String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -85,20 +81,8 @@ model Notification {
   description String
   status      String
   priority    String
-
-  notificationUsers NotificationUser[]
+  cui         String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-// Relación Muchos a Muchos: Usuario - Notificaciones
-model NotificationUser {
-  userId         String
-  notificationId String
-
-  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  notification Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
-
-  @@id([userId, notificationId])
 }

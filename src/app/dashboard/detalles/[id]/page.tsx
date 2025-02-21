@@ -9,8 +9,9 @@ import { useEffect, useState } from "react";
 interface obra {
   id: string;
   state: string;
-  propietario_id: string;
-  resident: string;
+  propietario_id: string | null;
+  resident: string | null;
+  supervisor: string | null;
   projectType: string;
   obraType: string;
   cui: string;
@@ -41,9 +42,11 @@ function Page() {
         const data = await obtenerDetalles(id);
         setObra(data);
 
-        if (data && data.propietario_id) {
-          const imgs = await getDaysWorked(data.propietario_id, data.cui);
+        if (data && data.cui) {
+          const imgs = await getDaysWorked(data.cui);
           setImg(imgs);
+          console.log(imgs);
+          
         }
       }
     };
@@ -53,9 +56,9 @@ function Page() {
 
   const coordenadasobra = obra
     ? {
-      projectType: obra.projectType,
-      points: obra.points,
-    }
+        projectType: obra.projectType,
+        points: obra.points,
+      }
     : null;
 
   if (!obra)

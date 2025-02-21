@@ -12,6 +12,7 @@ interface obra {
   name: string;
   areaOrLength: string;
   points: [number, number][];
+  fechaFinal: string;
 }
 
 interface ObraDetailsProps {
@@ -37,13 +38,15 @@ export function ObraDetails({ obra, onClose }: ObraDetailsProps) {
           </div>
           <div>
             <strong className="text-[13px]">Proyecto:</strong>{" "}
-            <span className="text-[12px] text-gray-200">
-              {obra.obraType}
-            </span>
+            <span className="text-[12px] text-gray-200">{obra.obraType}</span>
           </div>
           <div>
             <strong className="text-[13px]">Residente:</strong>{" "}
             <span className="text-[12px] text-gray-200">{obra.resident}</span>
+          </div>
+          <div>
+            <strong className="text-[13px]">Finalización:</strong>{" "}
+            <span className="text-[12px] text-gray-200">{obra.fechaFinal}</span>
           </div>
         </div>
         <div className="flex flex-row p-3">

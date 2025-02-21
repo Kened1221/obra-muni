@@ -16,6 +16,7 @@ interface obra {
   name: string;
   areaOrLength: string;
   points: [number, number][];
+  fechaFinal: string;
 }
 
 interface UserLocation {

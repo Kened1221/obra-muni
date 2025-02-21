@@ -13,6 +13,7 @@ interface obra {
   name: string;
   areaOrLength: string;
   points: [number, number][];
+  fechaFinal: string;
 }
 
 interface UserLocation {
@@ -52,7 +53,12 @@ function ObraCard({ obra, setDefaultLocation }: obrasProsp) {
       <p className="text-secondary-foreground text-sm text-justify">
         Estado: {obra.state}
       </p>
-      <span className="text-sm text-gray-400">Residente: {obra.resident}</span>
+      <p className="text-secondary-foreground text-sm text-justify">
+        Residente: {obra.resident}
+      </p>
+      <p className="text-secondary-foreground text-sm text-justify">
+        Finalización: {obra.fechaFinal}
+      </p>
     </div>
   );
 }

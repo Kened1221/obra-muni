@@ -17,6 +17,11 @@ function CalendarObra({ setModalFecha, id, fecha }: CalendarObraProps) {
     useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  const formattedFecha =
+    fecha && !isNaN(Date.parse(fecha))
+      ? new Date(fecha).toISOString().split("T")[0]
+      : "";
+
   const handleMensajeGuardar = () => {
     if (!day) {
       toasterCustom(400, "Por favor, seleccione una fecha antes de continuar.");
@@ -73,7 +78,10 @@ function CalendarObra({ setModalFecha, id, fecha }: CalendarObraProps) {
   return (
     <div className="bg-background p-6 rounded-lg w-full sm:w-3/4 lg:w-1/2 max-w-sm sm:max-w-lg space-y-6 px-4 z-20">
       <div className="dark:bg-gray-800 bg-slate-200 rounded-3xl">
-        <CalendarCustom Daysworked={[fecha]} setDay={setDay} />
+        <CalendarCustom
+          Daysworked={formattedFecha ? [formattedFecha] : []}
+          setDay={setDay}
+        />
       </div>
       <div className="flex justify-center space-x-8">
         <Button

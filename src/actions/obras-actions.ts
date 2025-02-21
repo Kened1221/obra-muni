@@ -1,8 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
 import { prisma } from "@/lib/prisma";
-// import bcrypt from "bcryptjs";
 
 export async function totalObrasRegistradas() {
   try {
@@ -27,6 +25,11 @@ export async function totalObrasRegistradas() {
       name: obra.name,
       areaOrLength: obra.areaOrLength,
       points: obra.points ? JSON.parse(obra.points) : null,
+      fechaFinal: (() => {
+        const date = new Date(obra.fechaFinal);
+        date.setUTCHours(0, 0, 0, 0);
+        return date.toISOString().split("T")[0];
+      })(),
     }));
   } catch (error) {
     console.error("Error al buscar obras:", error);
@@ -95,27 +98,3 @@ export async function guardarObra(
     };
   }
 }
-
-// const hashedNewPassword = await bcrypt.hash(propietario_id, 12);
-// await prisma.userPhone.create({
-//   data: {
-//     name: resident,
-//     propietario_id: propietario_id,
-//     user: propietario_id,
-//     state: "Activo",
-//     cui: cui,
-//     password: hashedNewPassword,
-//   },
-// });
-
-// await prisma.notification.create({
-//   data: {
-//     UserID: propietario_id,
-//     title:
-//       "Registro de nueva " +
-//       (projectType === "Superficie" ? "construcción" : "carretera"),
-//     description: name,
-//     status: "actualizado",
-//     priority: "media",
-//   },
-// });

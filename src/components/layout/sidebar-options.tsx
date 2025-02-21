@@ -33,27 +33,115 @@ function SidebarOptions({ session }: CuentaContainerProps) {
 
   // 🔹 Definir enlaces para cada rol
   const adminLinks = [
-    { href: "/dashboard/registros", icon: <BsDatabaseFillCheck className="text-xl" />, tooltip: "Registros" },
-    { href: "/dashboard", icon: <GoHomeFill className="text-xl" />, tooltip: "Inicio" },
-    { href: "/dashboard/imagenes", icon: <FaBook className="text-xl" />, tooltip: "Imagenes" },
-    { href: "/dashboard/listas", icon: <FaListAlt className="text-xl" />, tooltip: "Listas" },
-    { href: "/dashboard/notificaciones", icon: <IoNotifications className="text-xl" />, tooltip: "Notificaciones" },
-    { href: "/dashboard/configuraciones", icon: <IoSettings className="text-xl" />, tooltip: "Configuraciones" },
-  ];
-
-  const residenteLinks = [
-    { href: "/dashboard/formularios", icon: <FaListAlt className="text-xl" />, tooltip: "Formularios" },
-    { href: "/dashboard/notificaciones", icon: <IoNotifications className="text-xl" />, tooltip: "Notificaciones" },
-  ];
-
-  const supervisorLinks = [
-    { href: "/dashboard/registros", icon: <FaBook className="text-xl" />, tooltip: "Registros" },
-    { href: "/dashboard/formularios", icon: <FaListAlt className="text-xl" />, tooltip: "Formularios" },
+    {
+      href: "/dashboard/registros",
+      icon: <BsDatabaseFillCheck className="text-xl" />,
+      tooltip: "Registros",
+    },
+    {
+      href: "/dashboard",
+      icon: <GoHomeFill className="text-xl" />,
+      tooltip: "Inicio",
+    },
+    {
+      href: "/dashboard/imagenes",
+      icon: <FaBook className="text-xl" />,
+      tooltip: "Imagenes",
+    },
+    {
+      href: "/dashboard/listas",
+      icon: <FaListAlt className="text-xl" />,
+      tooltip: "Listas",
+    },
+    {
+      href: "/dashboard/notificaciones",
+      icon: <IoNotifications className="text-xl" />,
+      tooltip: "Notificaciones",
+    },
+    {
+      href: "/dashboard/configuraciones",
+      icon: <IoSettings className="text-xl" />,
+      tooltip: "Configuraciones",
+    },
   ];
 
   const cmunicipalesLinks = [
-    { href: "/dashboard", icon: <GoHomeFill className="text-xl" />, tooltip: "Inicio" },
-    { href: "/dashboard/configuraciones", icon: <IoSettings className="text-xl" />, tooltip: "Configuraciones" },
+    {
+      href: "/dashboard/registros",
+      icon: <BsDatabaseFillCheck className="text-xl" />,
+      tooltip: "Registros",
+    },
+    {
+      href: "/dashboard",
+      icon: <GoHomeFill className="text-xl" />,
+      tooltip: "Inicio",
+    },
+    {
+      href: "/dashboard/imagenes",
+      icon: <FaBook className="text-xl" />,
+      tooltip: "Imagenes",
+    },
+    {
+      href: "/dashboard/listas",
+      icon: <FaListAlt className="text-xl" />,
+      tooltip: "Listas",
+    },
+    {
+      href: "/dashboard/notificaciones",
+      icon: <IoNotifications className="text-xl" />,
+      tooltip: "Notificaciones",
+    },
+    {
+      href: "/dashboard/configuraciones",
+      icon: <IoSettings className="text-xl" />,
+      tooltip: "Configuraciones",
+    },
+  ];
+
+  const residenteLinks = [
+    {
+      href: "/dashboard/registros",
+      icon: <BsDatabaseFillCheck className="text-xl" />,
+      tooltip: "Registros",
+    },
+    {
+      href: "/dashboard",
+      icon: <GoHomeFill className="text-xl" />,
+      tooltip: "Inicio",
+    },
+    {
+      href: "/dashboard/imagenes",
+      icon: <FaBook className="text-xl" />,
+      tooltip: "Imagenes",
+    },
+    {
+      href: "/dashboard/listas",
+      icon: <FaListAlt className="text-xl" />,
+      tooltip: "Listas",
+    },
+    {
+      href: "/dashboard/notificaciones",
+      icon: <IoNotifications className="text-xl" />,
+      tooltip: "Notificaciones",
+    },
+    {
+      href: "/dashboard/configuraciones",
+      icon: <IoSettings className="text-xl" />,
+      tooltip: "Configuraciones",
+    },
+  ];
+
+  const supervisorLinks = [
+    {
+      href: "/dashboard/registros",
+      icon: <FaBook className="text-xl" />,
+      tooltip: "Registros",
+    },
+    {
+      href: "/dashboard/formularios",
+      icon: <FaListAlt className="text-xl" />,
+      tooltip: "Formularios",
+    },
   ];
 
   // 🔹 Determinar qué enlaces usar según el rol

@@ -43,9 +43,10 @@ export default {
           id: user.id,
           name: user.name ?? "",
           email: user.email ?? "",
+          cui: user.cui ?? "",
           user: user.user,
-          role: userRole, // Ahora siempre es string
-        } satisfies User; // ✅ Garantiza que el objeto devuelto sea válido para NextAuth
+          role: userRole,
+        } satisfies User;
       },
     }),
   ],

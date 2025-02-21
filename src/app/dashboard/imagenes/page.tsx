@@ -1,13 +1,13 @@
 "use client";
 
-import RegistrosContainer from "./registros-container";
 import { useEffect, useState } from "react";
+import RegistrosContainer from "./registros-container";
 import { getCooImg } from "@/actions/register-action";
 import UploadImages from "./UploadImages";
 
 interface Record {
-  propietario_id: string;
-  resident: string;
+  propietario_id: string | null;
+  resident: string | null;
   cui: string;
   name: string;
   count: number;
@@ -17,23 +17,34 @@ export const dynamic = "force-dynamic";
 
 function Page() {
   const [record, setRecord] = useState<Record[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const fetchRecords = async () => {
-      const data = await getCooImg();
-      setRecord(data);
+    const fetchData = async () => {
+      try {
+        const data = await getCooImg();
+        setRecord(data);
+      } catch (error) {
+        console.error("Error al obtener registros:", error);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    fetchRecords();
+    fetchData();
   }, []);
 
   return (
     <main className="grid w-full items-center justify-center gap-4">
-      <div className="">
+      <div>
         <UploadImages record={record} />
       </div>
-      <div className="">
-        {record.length < 0 ? (
+      <div>
+        {loading ? (
+          <p className="text-lg text-gray-600 dark:text-gray-400 text-center">
+            Cargando registros...
+          </p>
+        ) : record.length === 0 ? (
           <p className="text-lg text-gray-600 dark:text-gray-400 text-center">
             No tienes registros en este momento...
           </p>

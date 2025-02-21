@@ -38,13 +38,11 @@ export default function FormularioRegisterObra({
   const [obraType, setObraType] = useState<string>(workData.obraType);
   const [fecha, setFecha] = useState<Date>(new Date(workData.fecha));
 
-  // 🔄 Sincronizar estados locales con `workData`
   useEffect(() => {
     setObraType(workData.obraType);
     setFecha(new Date(workData.fecha));
   }, [workData]);
 
-  // ✅ Mantener `cui` y `nombreObra` sincronizados
   const form = useForm({
     resolver: zodResolver(newObraSchema),
     defaultValues: {
@@ -60,7 +58,6 @@ export default function FormularioRegisterObra({
     });
   }, [workData, form.reset]);
 
-  // ✅ Usar `useCallback` para evitar renders innecesarios y tipar `prev` correctamente
   const actualizarWorkData = useCallback(() => {
     setworkData((prev: WorkData) => {
       if (
@@ -77,11 +74,10 @@ export default function FormularioRegisterObra({
           nombreObra: form.getValues("nombreObra"),
         };
       }
-      return prev; // No actualizar si los valores no cambiaron
+      return prev;
     });
   }, [fecha, obraType, form, setworkData]);
 
-  // ✅ Solo ejecutar `actualizarWorkData` cuando realmente cambien los valores
   useEffect(() => {
     actualizarWorkData();
   }, [fecha, obraType, form.watch("cui"), form.watch("nombreObra")]);
@@ -141,7 +137,6 @@ export default function FormularioRegisterObra({
               )}
             />
 
-            {/* 📌 Campo Fecha */}
             <CalendarForm
               fecha={(date: Date | undefined) => {
                 if (date) {
@@ -151,7 +146,6 @@ export default function FormularioRegisterObra({
               type="posterior"
             />
 
-            {/* 📌 Campo Tipo de Obra */}
             <Combobox
               placeholder="Tipo de obra"
               options={optionIcon}
@@ -162,7 +156,6 @@ export default function FormularioRegisterObra({
             />
           </div>
 
-          {/* 📌 Campo Nombre de la Obra */}
           <div className="w-full col-span-3">
             <FormField
               control={form.control}

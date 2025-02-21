@@ -4,7 +4,12 @@ import { useState, useEffect, useMemo } from "react";
 import { getObras } from "@/actions/obras-actions";
 import { deleteObra } from "@/actions/formulario-actions";
 import { Button } from "@/components/buttons/button";
-import { FaRegTrashAlt, FaUserPlus, FaEdit } from "react-icons/fa";
+import {
+  FaRegTrashAlt,
+  FaUserPlus,
+  FaEdit,
+  FaCalendarAlt,
+} from "react-icons/fa";
 import {
   ColumnDef,
   flexRender,
@@ -26,6 +31,7 @@ import RegisterUsuario from "@/components/views/register-user";
 import toasterCustom from "@/components/toaster-custom";
 import { ConfirmDialog } from "@/components/dialog/dialog-confirm";
 import MapsUpdate from "@/components/maps/maps-update";
+import CalendarObra from "@/components/views/update-calendarObra";
 
 interface Obra {
   id: string;
@@ -48,21 +54,35 @@ export function FormularioContainer() {
   const [modalU, setModalU] = useState(false);
   const [modalE, setModalE] = useState(false);
   const [idData, setIdData] = useState<string>("");
-  const [nameObra, setNameObra] = useState<string>("");
   const [modalDelete, setModalDelete] = useState(false);
-  const [obraSeleccionada, setObraSeleccionada] = useState<Obra | null>(null);
+  const [obraSeleccionada, setObraSeleccionada] = useState<Obra>({
+    id: "",
+    state: "",
+    propietario_id: "",
+    resident: "",
+    supervisor: "",
+    projectType: "",
+    obraType: "",
+    cui: "",
+    name: "",
+    areaOrLength: "",
+    points: [],
+    fechaFinal: "",
+  });
 
+  const [modalFecha, setModalFecha] = useState<boolean>(false);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await getObras();
+
         setObras(
           data.map((obra) => ({
             ...obra,
             propietario_id: obra.propietario_id ?? "",
             resident: obra.resident || "No asignado",
             supervisor: obra.supervisor || "No asignado",
-            fechaFinal: new Date(obra.fechaFinal).toLocaleDateString(),
+            fechaFinal: new Date(obra.fechaFinal).toISOString().split("T")[0],
           }))
         );
       } catch (error) {
@@ -81,24 +101,27 @@ export function FormularioContainer() {
   const confirmacionDelete = async () => {
     try {
       const response = await deleteObra(idData);
-      if (response?.status === 200) {
+      if (response.status === 200) {
         toasterCustom(200, "Obra eliminada exitosamente");
-        setObras((prevObras) => prevObras.filter((obra) => obra.id !== idData));
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
       } else {
         toasterCustom(400, "Error eliminando la obra");
       }
-    } catch (error) {
-      console.error("Error eliminando obra:", error);
+    } catch {
       toasterCustom(500, "Error inesperado al eliminar la obra");
     }
     setModalDelete(false);
   };
 
   const registrarUsuario = (id: string) => {
-    const obraEncontrada = obras.find((obra) => obra.id === id);
-    setIdData(id);
-    setNameObra(obraEncontrada?.name ?? "");
-    setModalU(true);
+    const obraSeleccionada = obras.find((obra) => obra.id === id);
+    if (obraSeleccionada) {
+      setIdData(id);
+      setObraSeleccionada(obraSeleccionada);
+      setModalU(true);
+    }
   };
 
   const EditarObra = (id: string) => {
@@ -107,6 +130,16 @@ export function FormularioContainer() {
       setIdData(id);
       setObraSeleccionada(obraSeleccionada);
       setModalE(true);
+    }
+  };
+
+  const actualizarFecha = (id: string) => {
+    const obraSeleccionada = obras.find((obra) => obra.id === id);
+
+    if (obraSeleccionada) {
+      setIdData(id);
+      setObraSeleccionada(obraSeleccionada);
+      setModalFecha(true);
     }
   };
 
@@ -154,6 +187,14 @@ export function FormularioContainer() {
             <FaEdit className="w-5 h-5" />
           </Button>
           <Button
+            className="bg-blue-500 hover:bg-blue-600 text-white"
+            size="icon"
+            title="Eliminar Obra"
+            onClick={() => actualizarFecha(row.original.id)}
+          >
+            <FaCalendarAlt className="w-5 h-5" />
+          </Button>
+          <Button
             className="bg-red-500 hover:bg-red-600 text-white"
             size="icon"
             title="Eliminar Obra"
@@ -178,7 +219,7 @@ export function FormularioContainer() {
     <div className="flex flex-col w-full h-screen p-6 gap-6">
       <div className="flex-grow w-full overflow-auto bg-background border rounded-lg shadow-md p-4">
         <h2 className="text-xl font-semibold mb-4 text-center">
-          Lista de Obras
+          Administrador de obras
         </h2>
 
         <div className="flex items-center py-4 gap-4">
@@ -239,13 +280,23 @@ export function FormularioContainer() {
 
       {modalU && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <RegisterUsuario id={idData} name={nameObra} setModalU={setModalU} />
+          <RegisterUsuario  obra={obraSeleccionada} setModalU={setModalU} />
         </div>
       )}
 
       {modalE && obraSeleccionada && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <MapsUpdate obra={obraSeleccionada} setModal={setModalE} />
+        </div>
+      )}
+
+      {modalFecha && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <CalendarObra
+            id={idData}
+            fecha={obraSeleccionada.fechaFinal}
+            setModalFecha={setModalFecha}
+          />
         </div>
       )}
 

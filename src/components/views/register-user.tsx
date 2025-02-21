@@ -19,19 +19,23 @@ import { useState } from "react";
 import { Combobox } from "../select/combobox";
 import { createUsuario } from "@/actions/formulario-actions";
 
-interface ResidentUpdateProps {
+interface Obra {
   id: string;
   name: string;
+  cui: string;
+}
+
+interface ResidentUpdateProps {
+  obra: Obra;
   setModalU: (value: boolean) => void;
 }
 
 export default function RegisterUsuario({
-  id,
-  name,
+  obra,
   setModalU,
 }: ResidentUpdateProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [typeUser, setTypeUser] = useState("");
+  const [role, setRole] = useState("");
 
   const form = useForm<z.infer<typeof updateUserResidentSchema>>({
     resolver: zodResolver(updateUserResidentSchema),
@@ -56,19 +60,21 @@ export default function RegisterUsuario({
 
   async function onSubmit(values: z.infer<typeof updateUserResidentSchema>) {
     setIsSubmitting(true);
-    toasterCustom(0);
 
-    const { userApellido, userNombre, id_propietario } = values;
-    const user = `${userApellido} ${userNombre}`;
-
-    if (!typeUser) {
-      toasterCustom(400, "Seleccione un tipo de usuario.");
+    if (
+      !role ||
+      !values.id_propietario ||
+      !values.userApellido ||
+      !values.userNombre
+    ) {
+      toasterCustom(400, "Complete el formulario");
       setIsSubmitting(false);
       return;
     }
-
+    const { userApellido, userNombre, id_propietario } = values;
+    const user = `${userApellido} ${userNombre}`;
     try {
-      const result = await createUsuario(id, user, id_propietario, typeUser);
+      const result = await createUsuario(obra.id, obra.cui,  user, id_propietario, role);
 
       if (result.status === 200) {
         toasterCustom(result.status, "Usuario registrado correctamente");
@@ -93,7 +99,7 @@ export default function RegisterUsuario({
   const optionIcon = [
     { value: "residente", label: "Residente" },
     { value: "supervisor", label: "Supervisor" },
-    { value: "cargos municipales", label: "Cargos municipales" },
+    { value: "cmunicipales", label: "Cargos municipales" },
   ];
 
   return (
@@ -110,7 +116,7 @@ export default function RegisterUsuario({
             <div className="space-y-2">
               <FormLabel>Obra</FormLabel>
               <Input
-                value={name}
+                value={obra.name}
                 disabled
                 className="bg-gray-800 cursor-not-allowed"
               />
@@ -119,8 +125,8 @@ export default function RegisterUsuario({
             <Combobox
               placeholder="Seleccionar tipo de usuario"
               options={optionIcon}
-              onChange={(value) => setTypeUser(value || "")}
-              value={typeUser}
+              onChange={(value) => setRole(value || "")}
+              value={role}
             />
 
             <FormField
@@ -133,7 +139,10 @@ export default function RegisterUsuario({
                     <Input
                       placeholder="Ingrese el ID del residente"
                       {...field}
-                      aria-required="true"
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, "");
+                        field.onChange(value);
+                      }}
                     />
                   </FormControl>
                   <FormMessage />
@@ -147,7 +156,7 @@ export default function RegisterUsuario({
                 name="userApellido"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Apellido</FormLabel>
+                    <FormLabel>Apellidos</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Apellido del residente"
@@ -165,7 +174,7 @@ export default function RegisterUsuario({
                 name="userNombre"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nombre</FormLabel>
+                    <FormLabel>Nombres/s</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Nombre del residente"

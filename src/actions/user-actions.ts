@@ -54,7 +54,6 @@ export async function updateUser(data: z.infer<typeof updateUserSchema>) {
 
     await prisma.notification.create({
       data: {
-        UserID: "Admin",
         title:"Actualización de contraseña",
         description: "La contraseña del usuario " + (data.user) + " ha sido actualizada",
         status: "actualizado",
