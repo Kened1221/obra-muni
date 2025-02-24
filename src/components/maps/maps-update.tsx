@@ -28,7 +28,6 @@ interface Obra {
   projectType: string;
 }
 
-
 interface obraUpdateProps {
   obra: Obra;
   setModal: (value: boolean) => void;
@@ -45,7 +44,6 @@ function MapsUpdate({ obra, setModal }: obraUpdateProps) {
   const [showConfirmationModal, SetShowConfirmationModal] = useState(false);
 
   const centroid = calculateHalfwayPoint(obra.points, obra.projectType);
-  
 
   const createPolygon = (points: [number, number][]): Feature<Polygon> => ({
     type: "Feature",
@@ -70,7 +68,8 @@ function MapsUpdate({ obra, setModal }: obraUpdateProps) {
       if (points.length < (projectType === "Superficie" ? 3 : 2)) {
         toasterCustom(
           400,
-          `Se requieren al menos ${projectType === "Superficie" ? 3 : 2
+          `Se requieren al menos ${
+            projectType === "Superficie" ? 3 : 2
           } puntos.`
         );
         return;

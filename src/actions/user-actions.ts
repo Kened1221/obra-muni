@@ -9,7 +9,7 @@ import bcrypt from "bcryptjs";
 import { formatDateTime } from "@/lib/format-date";
 
 // Función para actualizar la contraseña del usuario
-export async function updateUser(data: z.infer<typeof updateUserSchema>) {
+export async function updateUser(data: z.infer<typeof updateUserSchema>, cui:string) {
   try {
     const session = await auth();
 
@@ -58,6 +58,7 @@ export async function updateUser(data: z.infer<typeof updateUserSchema>) {
         description: "La contraseña del usuario " + (data.user) + " ha sido actualizada",
         status: "actualizado",
         priority: "media",
+        cui,
       },
     });
 

@@ -76,12 +76,6 @@ export default function FormImage({ record, setModal }: UploadImagesProps) {
 
     try {
       await handleFileUpload(editedImg);
-      console.log(
-        `${process.env.NEXT_PUBLIC_URL}/api/uploads/${editedImg.name}`,
-        obraSeleccionada?.propietario_id ?? "",
-        obraSeleccionada!.cui,
-        fecha.toISOString()
-      );
 
       const response = await guardarImg(
         `${process.env.NEXT_PUBLIC_URL}/api/uploads/${editedImg.name}`,

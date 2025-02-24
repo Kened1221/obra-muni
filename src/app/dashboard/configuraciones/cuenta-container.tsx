@@ -29,6 +29,7 @@ type Session = {
     email: string;
     id: string;
     user: string;
+    cui: string;
   };
   expires: string;
 };
@@ -65,7 +66,7 @@ export function CuentaContainer({ session }: CuentaContainerProps) {
 
   async function onSubmit(values: z.infer<typeof updateUserSchema>) {
     toasterCustom(0);
-    const data = await updateUser(values);
+    const data = await updateUser(values, session.user.cui);
 
     if (!data) {
       toasterCustom(500, "Ocurrió un error inesperado");

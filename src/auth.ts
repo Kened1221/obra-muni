@@ -22,6 +22,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
         token.role = user.role;
         token.user = user.user;
+        token.cui = user.cui;
       }
       return token;
     },
@@ -29,6 +30,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       session.user.id = token.id; // Incluye el ID en la sesión
       session.user.role = token.role; // Incluye el rol en la sesión
       session.user.user = token.user; //
+      session.user.cui = token.cui; //
       return session;
     },
     authorized: async ({ auth }) => {

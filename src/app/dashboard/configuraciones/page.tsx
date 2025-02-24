@@ -16,6 +16,7 @@ async function Page() {
       name: session.user.name || "",
       email: session.user.email || "",
       user: session.user.user || "usuario",
+      cui: session.user.cui || "",
     },
   };
 

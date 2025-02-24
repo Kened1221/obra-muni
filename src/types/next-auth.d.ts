@@ -9,7 +9,7 @@ declare module "next-auth" {
       id: string;
       role: string;
       user: string;
-      cui?: string; // Agregar `cui`
+      cui: string;
     } & DefaultSession["user"];
   }
 
@@ -17,7 +17,7 @@ declare module "next-auth" {
     id: string;
     role: string;
     user: string;
-    cui?: string; // Agregar `cui`
+    cui: string;
   }
 }
 
@@ -26,6 +26,6 @@ declare module "next-auth/jwt" {
     id: string;
     role: string;
     user: string;
-    cui?: string; // Agregar `cui`
+    cui: string;
   }
 }

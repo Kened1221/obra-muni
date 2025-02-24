@@ -1,19 +1,24 @@
-import { getNotification, getNotificationUser } from "@/actions/notificactions-actions";
+import {
+  getNotification,
+  getNotificationUser,
+} from "@/actions/notificactions-actions";
 import Notifications from "./notifications-container";
+
 import { auth } from "@/auth";
 
-export const dynamic = "force-dynamic";
+
 
 async function Page() {
-  const session = await auth();
-  const allowedRoles = ["administrador", "cmunicipales"];
 
+    const session = await auth();
+  
+  const allowedRoles = ["administrador", "cmunicipales", "supervisor"];
   let notification = [];
 
   if (session?.user?.role && allowedRoles.includes(session.user.role)) {
     notification = await getNotification();
   } else {
-    notification = await getNotificationUser(session?.user?.cui ?? "");
+    notification = await getNotificationUser(session?.user.cui ?? "");
   }
 
   return (

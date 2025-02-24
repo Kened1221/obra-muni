@@ -45,7 +45,6 @@ export default function RegisterUsuario({
       id_propietario: "",
     },
   });
-
   const handleUpperCase = (
     e: React.ChangeEvent<HTMLInputElement>,
     fieldName: "userApellido" | "userNombre" | "id_propietario"
@@ -74,7 +73,13 @@ export default function RegisterUsuario({
     const { userApellido, userNombre, id_propietario } = values;
     const user = `${userApellido} ${userNombre}`;
     try {
-      const result = await createUsuario(obra.id, obra.cui,  user, id_propietario, role);
+      const result = await createUsuario(
+        obra.id,
+        obra.cui,
+        user,
+        id_propietario,
+        role
+      );
 
       if (result.status === 200) {
         toasterCustom(result.status, "Usuario registrado correctamente");

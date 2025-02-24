@@ -22,34 +22,85 @@ export async function createUsuario(
   user: string,
   id_propietario: string,
   role: string
-): Promise<{ status: number; message: string }> {
+) {
   try {
-    if (role === "residente") {
-      await prisma.coordinates.update({
-        where: { id },
-        data: { resident: user, propietario_id: id_propietario },
-      });
-    }
-
-    if (role === "supervisor") {
-      await prisma.coordinates.update({
-        where: { id },
-        data: { supervisor: user, propietario_id: id_propietario },
-      });
-    }
-
     const hashedNewPassword = await bcrypt.hash(id_propietario, 12);
 
-    await prisma.user.create({
-      data: {
-        name: user,
-        role,
-        cui,
-        user: id_propietario,
-        password: hashedNewPassword,
-      },
+    // Actualización de coordenadas según el rol
+    const coordinateData =
+      role === "residente"
+        ? { resident: user, propietario_id: id_propietario }
+        : role === "supervisor"
+        ? { supervisor: user }
+        : {};
+
+    await prisma.coordinates.update({
+      where: { id },
+      data: coordinateData,
     });
 
+    if (role === "residente") {
+      // Desactivar todos los registros para el CUI
+      await prisma.userPhone.updateMany({
+        where: { cui },
+        data: { state: "desactivado" },
+      });
+
+      // Buscar registros existentes para este propietario y CUI
+      const result = await prisma.userPhone.findMany({
+        where: { propietario_id: id_propietario, cui },
+        select: { propietario_id: true, cui: true },
+      });
+
+      if (result.length === 0) {
+        await prisma.userPhone.create({
+          data: {
+            name: user,
+            propietario_id: id_propietario,
+            user: id_propietario,
+            cui,
+            state: "activo",
+            password: hashedNewPassword,
+          },
+        });
+      } else {
+        await prisma.userPhone.updateMany({
+          where: { propietario_id: id_propietario, cui },
+          data: { state: "activo" },
+        });
+      }
+    } else if (role === "supervisor") {
+      // Reiniciar roles previos para este usuario y obra
+      await prisma.user.updateMany({
+        where: { cuiobra: cui, role },
+        data: { role: "" },
+      });
+
+      // Buscar registros existentes para este usuario y obra
+      const result = await prisma.user.findMany({
+        where: { user: id_propietario, cuiobra: cui },
+        select: { user: true, cuiobra: true },
+      });
+
+      if (result.length === 0) {
+        await prisma.user.create({
+          data: {
+            name: user,
+            cuiobra: cui,
+            role,
+            user: id_propietario,
+            password: hashedNewPassword,
+          },
+        });
+      } else {
+        await prisma.user.updateMany({
+          where: { user: id_propietario, cuiobra: cui },
+          data: { role },
+        });
+      }
+    }
+
+    // Creación de la notificación
     await prisma.notification.create({
       data: {
         title: "Registro de nuevo " + role,
@@ -60,7 +111,7 @@ export async function createUsuario(
       },
     });
 
-    return { status: 200, message: "Residente registrado correctamente" };
+    return { status: 200, message: "Usuario registrado correctamente" };
   } catch (error) {
     console.error("Error en el registro:", error);
     return { status: 500, message: "Error al registrar el usuario" };

@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { GoHomeFill } from "react-icons/go";
 import { IoSettings, IoNotifications } from "react-icons/io5";
-import { FaListAlt, FaBook } from "react-icons/fa";
+import { FaListAlt } from "react-icons/fa";
+import { IoMdPhotos } from "react-icons/io";
+import { RiRoadMapFill } from "react-icons/ri";
 import { BsDatabaseFillCheck } from "react-icons/bs";
 import { usePathname } from "next/navigation";
 import {
@@ -40,18 +41,18 @@ function SidebarOptions({ session }: CuentaContainerProps) {
     },
     {
       href: "/dashboard",
-      icon: <GoHomeFill className="text-xl" />,
+      icon: <RiRoadMapFill className="text-xl" />,
       tooltip: "Inicio",
     },
     {
       href: "/dashboard/imagenes",
-      icon: <FaBook className="text-xl" />,
+      icon: <IoMdPhotos className="text-xl" />,
       tooltip: "Imagenes",
     },
     {
-      href: "/dashboard/listas",
+      href: "/dashboard/archivos",
       icon: <FaListAlt className="text-xl" />,
-      tooltip: "Listas",
+      tooltip: "Archivos",
     },
     {
       href: "/dashboard/notificaciones",
@@ -73,51 +74,18 @@ function SidebarOptions({ session }: CuentaContainerProps) {
     },
     {
       href: "/dashboard",
-      icon: <GoHomeFill className="text-xl" />,
+      icon: <RiRoadMapFill className="text-xl" />,
       tooltip: "Inicio",
     },
     {
       href: "/dashboard/imagenes",
-      icon: <FaBook className="text-xl" />,
+      icon: <IoMdPhotos className="text-xl" />,
       tooltip: "Imagenes",
     },
     {
-      href: "/dashboard/listas",
+      href: "/dashboard/archivos",
       icon: <FaListAlt className="text-xl" />,
-      tooltip: "Listas",
-    },
-    {
-      href: "/dashboard/notificaciones",
-      icon: <IoNotifications className="text-xl" />,
-      tooltip: "Notificaciones",
-    },
-    {
-      href: "/dashboard/configuraciones",
-      icon: <IoSettings className="text-xl" />,
-      tooltip: "Configuraciones",
-    },
-  ];
-
-  const residenteLinks = [
-    {
-      href: "/dashboard/registros",
-      icon: <BsDatabaseFillCheck className="text-xl" />,
-      tooltip: "Registros",
-    },
-    {
-      href: "/dashboard",
-      icon: <GoHomeFill className="text-xl" />,
-      tooltip: "Inicio",
-    },
-    {
-      href: "/dashboard/imagenes",
-      icon: <FaBook className="text-xl" />,
-      tooltip: "Imagenes",
-    },
-    {
-      href: "/dashboard/listas",
-      icon: <FaListAlt className="text-xl" />,
-      tooltip: "Listas",
+      tooltip: "Archivos",
     },
     {
       href: "/dashboard/notificaciones",
@@ -133,14 +101,19 @@ function SidebarOptions({ session }: CuentaContainerProps) {
 
   const supervisorLinks = [
     {
-      href: "/dashboard/registros",
-      icon: <FaBook className="text-xl" />,
-      tooltip: "Registros",
+      href: "/dashboard",
+      icon: <RiRoadMapFill className="text-xl" />,
+      tooltip: "Inicio",
     },
     {
-      href: "/dashboard/formularios",
-      icon: <FaListAlt className="text-xl" />,
-      tooltip: "Formularios",
+      href: "/dashboard/notificaciones",
+      icon: <IoNotifications className="text-xl" />,
+      tooltip: "Notificaciones",
+    },
+    {
+      href: "/dashboard/configuraciones",
+      icon: <IoSettings className="text-xl" />,
+      tooltip: "Configuraciones",
     },
   ];
 
@@ -149,8 +122,6 @@ function SidebarOptions({ session }: CuentaContainerProps) {
     switch (session?.user.role) {
       case "administrador":
         return adminLinks;
-      case "residente":
-        return residenteLinks;
       case "supervisor":
         return supervisorLinks;
       case "cmunicipales":

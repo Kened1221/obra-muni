@@ -45,7 +45,6 @@ function Page() {
         if (data && data.cui) {
           const imgs = await getDaysWorked(data.cui);
           setImg(imgs);
-          console.log(imgs);
           
         }
       }

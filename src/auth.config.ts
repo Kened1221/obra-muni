@@ -43,7 +43,7 @@ export default {
           id: user.id,
           name: user.name ?? "",
           email: user.email ?? "",
-          cui: user.cui ?? "",
+          cui: user.cuiobra?? "",
           user: user.user,
           role: userRole,
         } satisfies User;

@@ -34,6 +34,10 @@ function CustomMap({ obrasT, defaultLocation }: obrasProps) {
 
   const [styleLoaded, setStyleLoaded] = useState(false);
 
+  const [selectedStyle, setSelectedStyle] = useState(
+    "mapbox://styles/mapbox/standard"
+  );
+
   const [viewState, setViewState] = useState<ViewState>({
     latitude: defaultLocation.latitude,
     longitude: defaultLocation.longitude,
@@ -76,37 +80,54 @@ function CustomMap({ obrasT, defaultLocation }: obrasProps) {
 
   return (
     <div ref={mapContainerRef} className="w-full h-full">
-      <Map
-        mapboxAccessToken={token}
-        viewState={{
-          ...viewState,
-          width: containerSize.width,
-          height: containerSize.height,
-        }}
-        onMove={(evt) => setViewState(evt.viewState)}
-        attributionControl={false}
-        mapStyle={"mapbox://styles/mapbox/standard"}
-        onLoad={handleStyleLoad}
-        logoPosition="top-right"
-      >
-        {styleLoaded && (
-          <>
-            <NavigationControl
-              position="bottom-right"
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                padding: "10px",
-                gap: "10px",
-                borderRadius: "15px",
-              }}
-            />
-            {obrasT.map((obra, index) => (
-              <LocationObras key={index} obra={obra} />
-            ))}
-          </>
-        )}
-      </Map>
+      <div className="absolute p-4 z-10">
+        <select
+          id="mapStyle"
+          value={selectedStyle}
+          onChange={(e) => setSelectedStyle(e.target.value)}
+          className="border p-1 rounded bg-background"
+        >
+          <option value="mapbox://styles/mapbox/standard">3D</option>
+          <option value="mapbox://styles/mapbox/satellite-streets-v11">
+            Satelital
+          </option>
+          <option value="mapbox://styles/mapbox/outdoors-v11">Relieve</option>
+        </select>
+      </div>
+
+      <div ref={mapContainerRef} className="w-full h-full">
+        <Map
+          mapboxAccessToken={token}
+          viewState={{
+            ...viewState,
+            width: containerSize.width,
+            height: containerSize.height,
+          }}
+          onMove={(evt) => setViewState(evt.viewState)}
+          attributionControl={false}
+          mapStyle={selectedStyle}
+          onLoad={handleStyleLoad}
+          logoPosition="top-right"
+        >
+          {styleLoaded && (
+            <>
+              <NavigationControl
+                position="bottom-right"
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  padding: "10px",
+                  gap: "10px",
+                  borderRadius: "15px",
+                }}
+              />
+              {obrasT.map((obra, index) => (
+                <LocationObras key={index} obra={obra} />
+              ))}
+            </>
+          )}
+        </Map>
+      </div>
     </div>
   );
 }

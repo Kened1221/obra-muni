@@ -48,7 +48,7 @@ function MapObras({
         latitude: isClient ? userLocation.latitude : defaultLocation.latitude,
         zoom: 13,
       }}
-      mapStyle={"mapbox://styles/mapbox/satellite-streets-v12"}
+      mapStyle={"mapbox://styles/mapbox/satellite-streets-v11"}
       onClick={handleMapClick}
     >
       <NavigationControl

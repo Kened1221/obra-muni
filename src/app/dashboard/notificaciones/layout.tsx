@@ -10,5 +10,5 @@ export default async function ServerWrapper() {
     return <h1>Acceso denegado</h1>;
   }
 
-  return <Page />;
+  return <Page/>;
 }

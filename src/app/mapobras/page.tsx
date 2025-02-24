@@ -37,34 +37,28 @@ function Obras() {
     getObrasData();
   }, []);
 
-  console.log(queryResult);
-
   return (
     <div className="w-full h-full p-2">
       <Sheet>
-        <SheetTrigger className="absolute flex flex-row top-5 right-5 z-10 bg-[#FFEDD5] text-[#22252A] border-[#FBB889] border-2 rounded-xl p-4 gap-2 hover:bg-[#EFC5A9] items-center justify-center">
+        <SheetTrigger className="absolute top-5 right-5 z-10 flex items-center justify-center gap-2 bg-[#FFEDD5] text-[#22252A] border-2 border-[#FBB889] rounded-xl px-4 py-2 transition duration-300 ease-in-out hover:bg-[#EFC5A9] hover:scale-105 hover:shadow-lg"
+        >
           <FaMapMarked />
-          ABRIR OBRAS
+          REGISTRO OBRAS
         </SheetTrigger>
-        <SheetContent >
+        <SheetContent>
           <SheetHeader>
             <SheetTitle></SheetTitle>
-            <SheetDescription>
-              <SideDashboard
-                totalObras={queryResult}
-                setDefaultLocation={setDefaultLocation}
-              />
+            <SheetDescription asChild>
+              <div>
+                <SideDashboard
+                  totalObras={queryResult}
+                  setDefaultLocation={setDefaultLocation}
+                />
+              </div>
             </SheetDescription>
           </SheetHeader>
         </SheetContent>
       </Sheet>
-
-      {/* <div className="overflow-y-auto p-4 h-full w-fit rounded-xl bg-gradient-to-b from-[#ececec] dark:from-[#2D2D2D] dark:to-[#2D2D2D] to-[#eba77a]">
-        <SideDashboard
-          totalObras={queryResult}
-          setDefaultLocation={setDefaultLocation}
-        />
-      </div> */}
 
       <div className="rounded-xl overflow-hidden h-full w-full">
         <CustomMap obrasT={queryResult} defaultLocation={defaultLocation} />
