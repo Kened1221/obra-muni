@@ -67,22 +67,35 @@ export async function guardarObra(
   projectType: string,
   points: [number, number][],
   areaOrLength: string,
-  obraType: string,
-  cui: string,
-  name: string,
-  fechaFinal: Date
+  workdata: {
+    cui: string;
+    nombreObra: string;
+    fecha: Date;
+    obraType: string;
+    presupuesto: string;
+  }
 ) {
   try {
     await prisma.coordinates.create({
       data: {
         state: "Ejecucion",
         projectType,
-        obraType,
-        cui,
-        name,
+        obraType: workdata.obraType,
+        cui: workdata.cui,
+        name: workdata.nombreObra,
+        presupuesto: workdata.presupuesto,
         areaOrLength,
         points: JSON.stringify(points),
-        fechaFinal,
+        fechaFinal: workdata.fecha,
+      },
+    });
+    await prisma.notification.create({
+      data: {
+        title: "Registro de nuevo " + workdata.obraType,
+        description: "Creación de una nueva obra: " + workdata.nombreObra,
+        status: "actualizado",
+        priority: "alta",
+        cui: workdata.cui,
       },
     });
 

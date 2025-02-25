@@ -52,6 +52,7 @@ model Coordinates {
   obraType       String
   cui            String
   name           String
+  presupuesto    String
   areaOrLength   String
   points         String
   fechaFinal     DateTime

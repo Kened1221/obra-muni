@@ -16,6 +16,7 @@ interface obra {
   obraType: string;
   cui: string;
   name: string;
+  presupuesto: string;
   areaOrLength: string;
   points: [number, number][];
   fechaFinal: string;
@@ -45,7 +46,6 @@ function Page() {
         if (data && data.cui) {
           const imgs = await getDaysWorked(data.cui);
           setImg(imgs);
-          
         }
       }
     };

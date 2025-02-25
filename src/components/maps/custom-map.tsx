@@ -4,8 +4,9 @@ import { useEffect, useState, useRef } from "react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import Map, { NavigationControl, ViewState } from "react-map-gl";
 import LocationObras from "../views/location-works";
+import MapStylePreview from "./map-style";
 
-interface obra {
+interface Obra {
   id: string;
   state: string;
   propietario_id: string;
@@ -24,20 +25,17 @@ interface UserLocation {
   longitude: number;
 }
 
-interface obrasProps {
-  obrasT: obra[];
+interface ObrasProps {
+  obrasT: Obra[];
   defaultLocation: UserLocation;
 }
 
-function CustomMap({ obrasT, defaultLocation }: obrasProps) {
+export default function CustomMap({ obrasT, defaultLocation }: ObrasProps) {
   const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
   const [styleLoaded, setStyleLoaded] = useState(false);
-
-  const [selectedStyle, setSelectedStyle] = useState(
-    "mapbox://styles/mapbox/standard"
-  );
-
+  const [selectedStyle, setSelectedStyle] = useState("mapbox://styles/mapbox/standard");
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [viewState, setViewState] = useState<ViewState>({
     latitude: defaultLocation.latitude,
     longitude: defaultLocation.longitude,
@@ -46,11 +44,7 @@ function CustomMap({ obrasT, defaultLocation }: obrasProps) {
     pitch: 0,
     padding: { top: 0, right: 0, bottom: 0, left: 0 },
   });
-
-  const [containerSize, setContainerSize] = useState<{
-    width: number;
-    height: number;
-  }>({
+  const [containerSize, setContainerSize] = useState<{ width: number; height: number }>({
     width: 0,
     height: 0,
   });
@@ -78,23 +72,62 @@ function CustomMap({ obrasT, defaultLocation }: obrasProps) {
     setStyleLoaded(true);
   };
 
+  // Lista de estilos disponibles
+  const styles = [
+    { label: "3D", url: "mapbox://styles/mapbox/standard" },
+    { label: "Satelital", url: "mapbox://styles/mapbox/satellite-streets-v11" },
+    { label: "Relieve", url: "mapbox://styles/mapbox/outdoors-v11" },
+  ];
+
+  // Obtenemos el objeto del estilo seleccionado para mostrar su etiqueta
+  const selectedStyleObj = styles.find((s) => s.url === selectedStyle) || styles[0];
+
   return (
-    <div ref={mapContainerRef} className="w-full h-full">
-      <div className="absolute p-4 z-10">
-        <select
-          id="mapStyle"
-          value={selectedStyle}
-          onChange={(e) => setSelectedStyle(e.target.value)}
-          className="border p-1 rounded bg-background"
-        >
-          <option value="mapbox://styles/mapbox/standard">3D</option>
-          <option value="mapbox://styles/mapbox/satellite-streets-v11">
-            Satelital
-          </option>
-          <option value="mapbox://styles/mapbox/outdoors-v11">Relieve</option>
-        </select>
+    <div className="w-full h-full">
+      {/* Contenedor para la selección de estilo (dropdown) */}
+      <div
+        className="absolute z-10"
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 8,
+          padding: 8,
+        }}
+      >
+        {!dropdownOpen ? (
+          // Al presionar el estilo seleccionado se abre el desplegable
+          <div onClick={() => setDropdownOpen(true)}>
+            <MapStylePreview
+              key="selected"
+              styleUrl={selectedStyleObj.url}
+              name={selectedStyleObj.label}
+              isActive={true}
+              onSelect={() => {}} // No se requiere acción adicional
+              defaultLocation={defaultLocation}
+            />
+          </div>
+        ) : (
+          // Se muestran las 3 vistas previas para elegir el estilo
+          <div style={{ display: "flex", gap: 8 }}>
+            {styles.map((style, index) => (
+              <MapStylePreview
+                key={index}
+                styleUrl={style.url}
+                name={style.label}
+                isActive={selectedStyle === style.url}
+                onSelect={() => {
+                  setSelectedStyle(style.url);
+                  setDropdownOpen(false);
+                }}
+                defaultLocation={defaultLocation}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
+      {/* Contenedor del mapa principal */}
       <div ref={mapContainerRef} className="w-full h-full">
         <Map
           mapboxAccessToken={token}
@@ -131,5 +164,3 @@ function CustomMap({ obrasT, defaultLocation }: obrasProps) {
     </div>
   );
 }
-
-export default CustomMap;

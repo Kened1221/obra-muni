@@ -135,7 +135,6 @@ export function FormularioContainer() {
 
   const actualizarFecha = (id: string) => {
     const obraSeleccionada = obras.find((obra) => obra.id === id);
-
     if (obraSeleccionada) {
       setIdData(id);
       setObraSeleccionada(obraSeleccionada);
@@ -168,42 +167,50 @@ export function FormularioContainer() {
     {
       id: "acciones",
       header: "Acciones",
-      cell: ({ row }) => (
-        <div className="flex gap-2">
-          <Button
-            className="bg-green-500 hover:bg-green-600 text-white"
-            size="icon"
-            title="Registrar Usuario"
-            onClick={() => registrarUsuario(row.original.id)}
-          >
-            <FaUserPlus className="w-5 h-5" />
-          </Button>
-          <Button
-            className="bg-yellow-500 hover:bg-yellow-600 text-white"
-            size="icon"
-            title="Editar Obra"
-            onClick={() => EditarObra(row.original.id)}
-          >
-            <FaEdit className="w-5 h-5" />
-          </Button>
-          <Button
-            className="bg-blue-500 hover:bg-blue-600 text-white"
-            size="icon"
-            title="Eliminar Obra"
-            onClick={() => actualizarFecha(row.original.id)}
-          >
-            <FaCalendarAlt className="w-5 h-5" />
-          </Button>
-          <Button
-            className="bg-red-500 hover:bg-red-600 text-white"
-            size="icon"
-            title="Eliminar Obra"
-            onClick={() => eliminarObra(row.original.id)}
-          >
-            <FaRegTrashAlt className="w-5 h-5" />
-          </Button>
-        </div>
-      ),
+      cell: ({ row }) => {
+        const obra = row.original;
+
+        return (
+          <div className="flex gap-2">
+            {obra.state !== "Finalizado" && (
+              <>
+                <Button
+                  className="bg-green-500 hover:bg-green-600 text-white"
+                  size="icon"
+                  title="Registrar Usuario"
+                  onClick={() => registrarUsuario(obra.id)}
+                >
+                  <FaUserPlus className="w-5 h-5" />
+                </Button>
+                <Button
+                  className="bg-yellow-500 hover:bg-yellow-600 text-white"
+                  size="icon"
+                  title="Editar Obra"
+                  onClick={() => EditarObra(obra.id)}
+                >
+                  <FaEdit className="w-5 h-5" />
+                </Button>
+                <Button
+                  className="bg-blue-500 hover:bg-blue-600 text-white"
+                  size="icon"
+                  title="Editar Fecha"
+                  onClick={() => actualizarFecha(obra.id)}
+                >
+                  <FaCalendarAlt className="w-5 h-5" />
+                </Button>
+              </>
+            )}
+            <Button
+              className="bg-red-500 hover:bg-red-600 text-white"
+              size="icon"
+              title="Eliminar Obra"
+              onClick={() => eliminarObra(obra.id)}
+            >
+              <FaRegTrashAlt className="w-5 h-5" />
+            </Button>
+          </div>
+        );
+      },
     },
   ];
 
@@ -280,7 +287,7 @@ export function FormularioContainer() {
 
       {modalU && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <RegisterUsuario  obra={obraSeleccionada} setModalU={setModalU} />
+          <RegisterUsuario obra={obraSeleccionada} setModalU={setModalU} />
         </div>
       )}
 

@@ -55,9 +55,10 @@ export function CuentaContainer({ session }: CuentaContainerProps) {
   const form = useForm<z.infer<typeof updateUserSchema>>({
     resolver: zodResolver(updateUserSchema),
     defaultValues: {
+      id: session.user.id,
       name: session.user.name,
-      email: session.user.email,
       user: session.user.user,
+      email: session.user.email,
       password: "",
       newPassword: "",
       confirmNewPassword: "",
@@ -65,7 +66,6 @@ export function CuentaContainer({ session }: CuentaContainerProps) {
   });
 
   async function onSubmit(values: z.infer<typeof updateUserSchema>) {
-    toasterCustom(0);
     const data = await updateUser(values, session.user.cui);
 
     if (!data) {
@@ -134,12 +134,12 @@ export function CuentaContainer({ session }: CuentaContainerProps) {
 
           <FormField
             control={form.control}
-            name="email"
+            name="user"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Correo Electrónico:</FormLabel>
+                <FormLabel>Usuario:</FormLabel>
                 <FormControl>
-                  <Input placeholder="admin@admin.com" {...field} disabled />
+                  <Input placeholder="Admin" {...field} disabled />
                 </FormControl>
                 <FormMessage className="text-end" />
               </FormItem>
@@ -148,12 +148,12 @@ export function CuentaContainer({ session }: CuentaContainerProps) {
 
           <FormField
             control={form.control}
-            name="user"
+            name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Usuario:</FormLabel>
+                <FormLabel>Correo Electrónico:</FormLabel>
                 <FormControl>
-                  <Input placeholder="Admin" {...field} disabled />
+                  <Input placeholder="admin@admin.com" {...field} />
                 </FormControl>
                 <FormMessage className="text-end" />
               </FormItem>
@@ -270,7 +270,7 @@ export function CuentaContainer({ session }: CuentaContainerProps) {
         onConfirm={handleConfirmSave}
         title="¿Estás seguro que deseas actualizar su contraseña?"
         description="Al actualizar su contraseña, se cerrará la sesión y deberá iniciar sesión nuevamente."
-        styleButton="bg-green-500 hover:bg-emerald-500"
+        styleButton="bg-blue-500 hover:bg-emerald-500"
       />
     </div>
   );

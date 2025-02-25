@@ -122,7 +122,7 @@ function ImageDetalles({
                 <img
                   src={selectedImage.url}
                   alt={selectedImage.id}
-                  className="w-full h-full object-cover rounded-md mb-3"
+                  className="w-full h-full max-w-6xl max-h-6xl object-cover rounded-lg"
                 />
               </div>
             </div>

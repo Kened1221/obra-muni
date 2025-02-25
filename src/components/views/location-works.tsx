@@ -49,41 +49,41 @@ function LocationObras({ obra }: { obra: obra }) {
   const layerConfig =
     typeObra === "Polygon"
       ? {
-        id: `polygon-layer-${obra.id}`,
-        type: "fill" as "fill",
-        paint: {
-          "fill-color": "#088ff5",
-          "fill-opacity": 0.5,
-          "fill-outline-color": "#000000",
-        },
-      }
+          id: `polygon-layer-${obra.id}`,
+          type: "fill" as "fill",
+          paint: {
+            "fill-color": "#088ff5",
+            "fill-opacity": 0.5,
+            "fill-outline-color": "#000000",
+          },
+        }
       : {
-        id: `line-layer-${obra.id}`,
-        type: "line" as "line",
-        paint: {
-          "line-color": "#14437F",
-          "line-width": 5,
-        },
-      };
+          id: `line-layer-${obra.id}`,
+          type: "line" as "line",
+          paint: {
+            "line-color": "#14437F",
+            "line-width": 5,
+          },
+        };
 
   const geoJsonData: Feature<Polygon | LineString> =
     typeObra === "Polygon"
       ? {
-        type: "Feature",
-        properties: {},
-        geometry: {
-          type: "Polygon",
-          coordinates: [obra.points],
-        },
-      }
+          type: "Feature",
+          properties: {},
+          geometry: {
+            type: "Polygon",
+            coordinates: [obra.points],
+          },
+        }
       : {
-        type: "Feature",
-        properties: {},
-        geometry: {
-          type: "LineString",
-          coordinates: obra.points,
-        },
-      };
+          type: "Feature",
+          properties: {},
+          geometry: {
+            type: "LineString",
+            coordinates: obra.points,
+          },
+        };
 
   const handleMarkerClick = () => {
     setShowDetails(true);
@@ -102,7 +102,7 @@ function LocationObras({ obra }: { obra: obra }) {
       Carretera: <FaRoad className="text-[#f75617] text-2xl z-0" />,
       Clinica: <FaHospital className="text-[#16A34A] text-2xl z-0" />,
       Cultural: <FaLandmark className="text-[#EAB308] text-2xl z-0" />,
-      Deposito: <FaBuilding className="text-[#6B7280] text-2xl z-0" />,
+      Deposito: <FaBuilding className="text-[#e59e4e] text-2xl z-0" />,
       Edificio: <FaBuilding className="text-[#DC2626] text-2xl z-0" />,
       Embalse: <FaWater className="text-[#F97316] text-2xl z-0" />,
       Escuela: <FaUniversity className="text-[#1D4ED8] text-2xl z-0" />,

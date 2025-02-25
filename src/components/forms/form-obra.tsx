@@ -1,9 +1,8 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useState, useEffect, useCallback } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Combobox } from "@/components/select/combobox";
 import {
@@ -22,7 +21,8 @@ import { CalendarForm } from "@/components/ui/calendarForm";
 interface WorkData {
   cui: string;
   nombreObra: string;
-  fecha: Date;
+  fecha: Date | null;
+  presupuesto: string;
   obraType: string;
 }
 
@@ -35,52 +35,12 @@ export default function FormularioRegisterObra({
   setworkData,
   workData,
 }: FormularioRegisterObraProps) {
-  const [obraType, setObraType] = useState<string>(workData.obraType);
-  const [fecha, setFecha] = useState<Date>(new Date(workData.fecha));
-
-  useEffect(() => {
-    setObraType(workData.obraType);
-    setFecha(new Date(workData.fecha));
-  }, [workData]);
+  const [obraType, setObraType] = useState<string>(workData.obraType || "");
 
   const form = useForm({
     resolver: zodResolver(newObraSchema),
-    defaultValues: {
-      cui: workData.cui,
-      nombreObra: workData.nombreObra,
-    },
+    defaultValues: workData,
   });
-
-  useEffect(() => {
-    form.reset({
-      cui: workData.cui,
-      nombreObra: workData.nombreObra,
-    });
-  }, [workData, form.reset]);
-
-  const actualizarWorkData = useCallback(() => {
-    setworkData((prev: WorkData) => {
-      if (
-        prev.fecha.getTime() !== fecha.getTime() ||
-        prev.obraType !== obraType ||
-        prev.cui !== form.getValues("cui") ||
-        prev.nombreObra !== form.getValues("nombreObra")
-      ) {
-        return {
-          ...prev,
-          fecha,
-          obraType,
-          cui: form.getValues("cui"),
-          nombreObra: form.getValues("nombreObra"),
-        };
-      }
-      return prev;
-    });
-  }, [fecha, obraType, form, setworkData]);
-
-  useEffect(() => {
-    actualizarWorkData();
-  }, [fecha, obraType, form.watch("cui"), form.watch("nombreObra")]);
 
   const optionIcon = [
     { value: "Acueducto", label: "Acueducto" },
@@ -114,8 +74,7 @@ export default function FormularioRegisterObra({
     <div className="flex w-full h-full mx-auto items-center">
       <Form {...form}>
         <div className="space-y-6 w-full mx-auto p-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
-            {/* 📌 Campo CUI */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
             <FormField
               control={form.control}
               name="cui"
@@ -124,11 +83,40 @@ export default function FormularioRegisterObra({
                   <FormLabel>CUI:</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="111111111"
+                      placeholder="1234567"
+                      {...field}
+                      maxLength={7}
+                      onChange={(e) => {
+                        const value = e.target.value
+                          .replace(/\D/g, "")
+                          .slice(0, 7);
+                        field.onChange(value);
+                        setworkData((prev) => ({ ...prev, cui: value }));
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage className="text-end" />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="presupuesto"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Presupuesto:</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="S/......"
                       {...field}
                       onChange={(e) => {
                         const value = e.target.value.replace(/\D/g, "");
                         field.onChange(value);
+                        setworkData((prev) => ({
+                          ...prev,
+                          presupuesto: value,
+                        }));
                       }}
                     />
                   </FormControl>
@@ -140,7 +128,7 @@ export default function FormularioRegisterObra({
             <CalendarForm
               fecha={(date: Date | undefined) => {
                 if (date) {
-                  setFecha(date);
+                  setworkData((prev) => ({ ...prev, fecha: date }));
                 }
               }}
               type="posterior"
@@ -151,6 +139,7 @@ export default function FormularioRegisterObra({
               options={optionIcon}
               onChange={(value) => {
                 setObraType(value || "");
+                setworkData((prev) => ({ ...prev, obraType: value || "" }));
               }}
               value={obraType}
             />
@@ -170,6 +159,7 @@ export default function FormularioRegisterObra({
                       onChange={(e) => {
                         const value = e.target.value.toUpperCase();
                         field.onChange(value);
+                        setworkData((prev) => ({ ...prev, nombreObra: value }));
                       }}
                     />
                   </FormControl>

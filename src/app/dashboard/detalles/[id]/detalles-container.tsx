@@ -11,6 +11,7 @@ interface obra {
   obraType: string;
   cui: string;
   name: string;
+  presupuesto: string;
   areaOrLength: string;
   points: [number, number][];
   fechaFinal: string;
@@ -34,6 +35,7 @@ function DetallesContainer({ obraDetalles }: { obraDetalles: obra }) {
     resident: obraDetalles.resident,
     projectType: obraDetalles.projectType,
     obraType: obraDetalles.obraType,
+    presupuesto: obraDetalles.presupuesto,
     propietario_id: obraDetalles.propietario_id,
     fechaFinal: obraDetalles.fechaFinal,
     porcentaje: obraDetalles.porcentaje,

@@ -37,6 +37,7 @@ export async function obtenerDetalles(id: string) {
       obraType: obraEncontrada.obraType,
       cui: obraEncontrada.cui,
       name: obraEncontrada.name,
+      presupuesto: obraEncontrada.presupuesto,
       areaOrLength: obraEncontrada.areaOrLength,
       points: JSON.parse(obraEncontrada.points),
       fechaFinal: (() => {
@@ -54,10 +55,48 @@ export async function obtenerDetalles(id: string) {
   }
 }
 
+export async function estadoObra(id: string) {
+  try {
+    const obraEncontrada = await prisma.coordinates.findUnique({
+      where: { id },
+    });
+
+    if (
+      !obraEncontrada ||
+      !obraEncontrada.fechaFinal ||
+      !obraEncontrada.createdAt
+    ) {
+      return null;
+    }
+
+    const tiempoTotal =
+      obraEncontrada.fechaFinal.getTime() - obraEncontrada.createdAt.getTime();
+
+    const tiempoTranscurrido = Date.now() - obraEncontrada.createdAt.getTime();
+
+    let porcentaje = Number(
+      ((tiempoTranscurrido / tiempoTotal) * 100).toFixed(3)
+    );
+
+    if (porcentaje >= 100) {
+      porcentaje = 100;
+    }
+
+    return {
+      id: obraEncontrada.id,
+      state: obraEncontrada.state,
+      porcentaje,
+    };
+  } catch (error) {
+    console.error("Error en detalles:", error);
+    return null;
+  }
+}
+
 export async function FinalizarObra(id: string) {
   try {
     await prisma.coordinates.update({
-      where: { id: id },
+      where: { id },
       data: {
         state: "Finalizado",
       },

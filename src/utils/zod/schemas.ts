@@ -48,11 +48,11 @@ export const updateUserSchema = z
   .object({
     id: z.string().optional(),
     name: z.string().optional(),
+    user: z.string({ required_error: "El nombre de usuario es obligatorio" }),
     email: z
       .string()
       .email({ message: "Debe ser un correo electrónico válido" })
       .optional(),
-    user: z.string({ required_error: "El nombre de usuario es obligatorio" }),
     password: z
       .string({ required_error: "Campo obligatorio" })
       .min(1, "Campo obligatorio"),
@@ -70,18 +70,22 @@ export const updateUserSchema = z
   );
 
 // Esquema para una nueva obra
-
 export const newObraSchema = z.object({
   cui: z
     .string({ required_error: "Campo obligatorio" })
-    .min(7, "El cui debe tener al menos 7 caracteres")
-    .max(9, "El cui debe tener al maximo 9 caracteres")
+    .length(7, "El CUI debe tener exactamente 7 caracteres")
     .regex(/^\d+$/, "El CUI solo puede contener números"),
-
+  presupuesto: z
+    .string({ required_error: "Campo obligatorio" })
+    .min(1, "El presupuesto debe tener al menos 1 carácter")
+    .regex(/^\d+$/, "El presupuesto solo puede contener números"),
   nombreObra: z
     .string({ required_error: "Campo obligatorio" })
     .min(1, "Campo obligatorio"),
+  obraType: z.string({ required_error: "Campo obligatorio" }),
+  fecha: z.date({ required_error: "Debe seleccionar una fecha válida" }),
 });
+
 
 
 // Esquema para actualizar al residente
