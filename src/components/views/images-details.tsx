@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 
-import MapLocationDeatils from "./map-location-details";
 import { useSession } from "next-auth/react";
+import MapLocationPhoto from "../maps/map-location-photo";
 
 interface ImgProps {
   id: string;
@@ -19,13 +19,13 @@ interface LocationObra {
 
 interface ImageDetallesProps {
   selectedImage: ImgProps;
-  coordinates: LocationObra | null;
+  type_points_obra: LocationObra | null;
   closeModal: () => void;
 }
 
 function ImageDetalles({
   selectedImage,
-  coordinates,
+  type_points_obra,
   closeModal,
 }: ImageDetallesProps) {
   const latitude = selectedImage.latitud
@@ -83,10 +83,10 @@ function ImageDetalles({
             <div className="w-full md:w-1/2 flex justify-center items-center">
               {latitude !== null && longitude !== null ? (
                 <div className="w-full h-[250px] md:h-full min-w-[200px] min-h-[250px] rounded-lg overflow-hidden">
-                  <MapLocationDeatils
+                  <MapLocationPhoto
                     longitude={longitude}
                     latitude={latitude}
-                    coordinates={coordinates}
+                    type_points_obra={type_points_obra}
                   />
                 </div>
               ) : (

@@ -6,7 +6,8 @@ interface obra {
   id: string;
   state: string;
   propietario_id: string;
-  resident: string;
+  resident: string | null;
+  supervisor: string | null;
   projectType: string;
   obraType: string;
   cui: string;
@@ -51,7 +52,13 @@ function ObraCard({ obra, setDefaultLocation }: obrasProsp) {
         Tipo de proyecto: {obra.obraType}
       </p>
       <p className="text-secondary-foreground text-sm text-justify">
+        Tamaño Aproximado: {obra.areaOrLength}
+      </p>
+      <p className="text-secondary-foreground text-sm text-justify">
         Estado: {obra.state}
+      </p>
+      <p className="text-secondary-foreground text-sm text-justify">
+        Supervisor: {obra.supervisor}
       </p>
       <p className="text-secondary-foreground text-sm text-justify">
         Residente: {obra.resident}

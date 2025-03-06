@@ -46,9 +46,6 @@ function RegistroItem({ registro }: { registro: Register }) {
           <div className="text-lg">{registro.cui}</div>
         </div>
 
-
-        
-
         <div className="flex items-center border-l-2 pl-4 w-full md:w-8/12">
           <p className="text-sm text-justify text-gray-600 dark:text-gray-300">
             {registro.name}

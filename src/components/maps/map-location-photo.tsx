@@ -1,22 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/prefer-as-const */
-"use client";
-
-import "mapbox-gl/dist/mapbox-gl.css";
 import { Feature, Polygon, LineString } from "geojson";
-import calculateHalfwayPoint from "@/utils/midPoint";
-import MapProvider from "../MapProvider";
-import { Source, Layer } from "react-map-gl";
+import MapProvider, { MarkerData } from "../MapProvider";
+import MarkerOverlay from "../MarkerOverlay";
+import { Layer, Source } from "react-map-gl";
 import { useMapContext } from "@/context/MapContext";
 
-interface Obra {
-  id: string;
-  state: string;
+interface LocationObra {
   projectType: string;
   points: [number, number][];
 }
 
-// Componente hijo para manejar el renderizado condicional
+interface MapLocationDetailsProps {
+  longitude: number;
+  latitude: number;
+  type_points_obra: LocationObra | null;
+}
+
 function MapContent({
   geoJsonData,
   layerConfig,
@@ -37,29 +37,35 @@ function MapContent({
   );
 }
 
-function CustomMap({ obra }: { obra: Obra }) {
-  const typeObra = obra.projectType === "Superficie" ? "Polygon" : "LineString";
-  const centroid = calculateHalfwayPoint(obra.points, obra.projectType);
+export default function MapLocationPhoto({
+  longitude,
+  latitude,
+  type_points_obra,
+}: MapLocationDetailsProps) {
+  const typeObra =
+    type_points_obra?.projectType === "Superficie" ? "Polygon" : "LineString";
 
   const layerConfig =
     typeObra === "Polygon"
       ? {
-          id: `polygon-layer-${obra.id}`,
+          id: `polygon-layer`,
           type: "fill" as "fill",
           paint: {
-            "fill-color": "#E27373",
+            "fill-color": "#088ff5",
             "fill-opacity": 0.5,
-            "fill-outline-color": "#FF0000",
+            "fill-outline-color": "#000000",
           },
         }
       : {
-          id: `line-layer-${obra.id}`,
+          id: `line-layer`,
           type: "line" as "line",
           paint: {
-            "line-color": "#FF0000",
+            "line-color": "#14437F",
             "line-width": 5,
           },
         };
+
+  const points = type_points_obra?.points ?? [];
 
   const geoJsonData: Feature<Polygon | LineString> =
     typeObra === "Polygon"
@@ -68,7 +74,7 @@ function CustomMap({ obra }: { obra: Obra }) {
           properties: {},
           geometry: {
             type: "Polygon",
-            coordinates: [obra.points],
+            coordinates: [points],
           },
         }
       : {
@@ -76,21 +82,37 @@ function CustomMap({ obra }: { obra: Obra }) {
           properties: {},
           geometry: {
             type: "LineString",
-            coordinates: obra.points,
+            coordinates: points,
           },
         };
 
+  const markers: MarkerData[] = [
+    {
+      id: "Photo-obra-marker",
+      obraType: "Point",
+      latitude,
+      longitude,
+    },
+  ];
+
+  const hasPoints = points.length > 0;
+
   return (
-    <div className="relative w-full h-full">
+    <div className="w-full h-full rounded-lg overflow-hidden">
       <MapProvider
-        defaultLocation={centroid}
+        defaultLocation={{
+          latitude: latitude,
+          longitude: longitude,
+        }}
+        markers={markers}
+        mapStyle={"mapbox://styles/mapbox/standard"}
         enableTerrain={false}
-        mapStyle="mapbox://styles/mapbox/standard"
       >
-        <MapContent geoJsonData={geoJsonData} layerConfig={layerConfig} />
+        <MarkerOverlay markers={markers} />
+        {hasPoints && (
+          <MapContent geoJsonData={geoJsonData} layerConfig={layerConfig} />
+        )}
       </MapProvider>
     </div>
   );
 }
-
-export default CustomMap;

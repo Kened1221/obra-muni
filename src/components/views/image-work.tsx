@@ -19,10 +19,10 @@ interface LocationObra {
 
 interface ImagesContainerProps {
   imgs: ImgProps[] | null;
-  coordinates: LocationObra | null;
+  type_points_obra: LocationObra | null;
 }
 
-function ImageWork({ imgs, coordinates }: ImagesContainerProps) {
+export default function ImageWork({ imgs, type_points_obra }: ImagesContainerProps) {
   const [selectedImage, setSelectedImage] = useState<ImgProps | null>(null);
 
   const closeModal = () => {
@@ -46,7 +46,7 @@ function ImageWork({ imgs, coordinates }: ImagesContainerProps) {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4  h-0">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 h-0">
       {imgs.map((img) => (
         <div
           key={img.id}
@@ -64,10 +64,10 @@ function ImageWork({ imgs, coordinates }: ImagesContainerProps) {
       ))}
 
       {selectedImage && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 z-50 p-4">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 z-50 p-6">
           <ImageDetalles
             selectedImage={selectedImage}
-            coordinates={coordinates}
+            type_points_obra={type_points_obra}
             closeModal={closeModal}
           />
         </div>
@@ -76,4 +76,3 @@ function ImageWork({ imgs, coordinates }: ImagesContainerProps) {
   );
 }
 
-export default ImageWork;

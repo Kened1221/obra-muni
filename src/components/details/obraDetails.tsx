@@ -1,11 +1,11 @@
-import { Button } from "@/components/buttons/button";
-import Link from "next/link";
+// import Link from "next/link";
 
 interface obra {
   id: string;
   state: string;
   propietario_id: string;
-  resident: string;
+  resident: string | null;
+  supervisor: string | null;
   projectType: string;
   obraType: string;
   cui: string;
@@ -14,51 +14,47 @@ interface obra {
   points: [number, number][];
   fechaFinal: string;
 }
-
 interface ObraDetailsProps {
-  obra: obra;
-  onClose: () => void;
+  obra?: obra;
 }
 
-export function ObraDetails({ obra, onClose }: ObraDetailsProps) {
+export function ObraDetails({ obra }: ObraDetailsProps) {
+  if (!obra) {
+    return <p className="text-white text-center">No hay obra seleccionada</p>;
+  }
+
   return (
-    <div className="absolute z-10 transform -translate-x-1/2 -translate-y-1/2">
-      <div className="bg-gradient-to-r from-gray-900 to-black text-white p-4 rounded-lg shadow-lg max-w-full sm:max-w-lg w-[320px] mx-auto text-justify">
-        <h2 className="text-[14px] font-extrabold mb-4 text-center">Obra</h2>
-        <div className="space-y-3">
-          <div>
-            <strong className="text-[13px]">CUI:</strong>{" "}
-            <span className="text-[12px] text-gray-200">{obra.cui}</span>
-          </div>
-          <div>
-            <strong className="text-[13px]">Descripción del Proyecto:</strong>
-            <p className="text-[12px] leading-relaxed text-gray-200">
-              {obra.name}
-            </p>
-          </div>
-          <div>
-            <strong className="text-[13px]">Proyecto:</strong>{" "}
-            <span className="text-[12px] text-gray-200">{obra.obraType}</span>
-          </div>
-          <div>
-            <strong className="text-[13px]">Residente:</strong>{" "}
-            <span className="text-[12px] text-gray-200">{obra.resident}</span>
-          </div>
-          <div>
-            <strong className="text-[13px]">Finalización:</strong>{" "}
-            <span className="text-[12px] text-gray-200">{obra.fechaFinal}</span>
-          </div>
+    <div className="w-full h-full text-sm">
+      <div className="space-y-3 text-start">
+        <div>
+          <strong className="font-bold text-justify">
+            Descripción del Proyecto:
+          </strong>
+          <p className="leading-relaxed dark:text-gray-200">{obra.name}</p>
         </div>
-        <div className="flex flex-row p-3">
-          <Button className="mx-auto block" onClick={onClose}>
-            Cerrar
-          </Button>
-          <Link
-            href={`/dashboard/detalles/${obra.id}`}
-            className="mx-auto px-4 py-2 bg-green-600 text-sm text-center items-center rounded-md hover:bg-green-400 transition-colors duration-300"
-          >
-            Detalles
-          </Link>
+        <div>
+          <strong className="font-bold">CUI:</strong>{" "}
+          <span className="dark:text-gray-200">{obra.cui}</span>
+        </div>
+        <div>
+          <strong className="font-bold">Proyecto:</strong>{" "}
+          <span className="dark:text-gray-200">{obra.obraType}</span>
+        </div>
+        <div>
+          <strong className="font-bold">Medida Aproximada: </strong>{" "}
+          <span className="dark:text-gray-200">{obra.areaOrLength}</span>
+        </div>
+        <div>
+          <strong className="font-bold">Estado: </strong>{" "}
+          <span className="dark:text-gray-200">{obra.state}</span>
+        </div>
+        <div>
+          <strong className="font-bold">Supervisor: </strong>{" "}
+          <span className="dark:text-gray-200">{obra.supervisor}</span>
+        </div>
+        <div>
+          <strong className="font-bold">Residente:</strong>{" "}
+          <span className="dark:text-gray-200">{obra.resident}</span>
         </div>
       </div>
     </div>

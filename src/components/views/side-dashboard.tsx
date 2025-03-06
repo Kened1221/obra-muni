@@ -9,7 +9,8 @@ interface obra {
   id: string;
   state: string;
   propietario_id: string;
-  resident: string;
+  resident: string | null;
+  supervisor: string | null;
   projectType: string;
   obraType: string;
   cui: string;
@@ -42,8 +43,10 @@ function SideDashboard({ totalObras, setDefaultLocation }: obrasProsp) {
         obra.name.toLowerCase().includes(searchTerm) ||
         obra.state.toLowerCase().includes(searchTerm) ||
         obra.obraType.toLowerCase().includes(searchTerm) ||
+        obra.areaOrLength.toLowerCase().includes(searchTerm) ||
         obra.cui.toLowerCase().includes(searchTerm) ||
-        obra.resident.toLowerCase().includes(searchTerm);
+        obra.supervisor?.toLowerCase().includes(searchTerm) ||
+        obra.resident?.toLowerCase().includes(searchTerm);
       return matchesSearch;
     });
 

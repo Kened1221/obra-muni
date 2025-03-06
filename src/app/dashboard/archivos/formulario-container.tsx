@@ -32,6 +32,7 @@ import toasterCustom from "@/components/toaster-custom";
 import { ConfirmDialog } from "@/components/dialog/dialog-confirm";
 import MapsUpdate from "@/components/maps/maps-update";
 import CalendarObra from "@/components/views/update-calendarObra";
+import calculateHalfwayPoint from "@/utils/midPoint";
 
 interface Obra {
   id: string;
@@ -293,7 +294,14 @@ export function FormularioContainer() {
 
       {modalE && obraSeleccionada && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <MapsUpdate obra={obraSeleccionada} setModal={setModalE} />
+          <MapsUpdate
+            obra={obraSeleccionada}
+            coordinates={calculateHalfwayPoint(
+              obraSeleccionada.points,
+              obraSeleccionada.projectType
+            )}
+            setNodal={setModalE}
+          />
         </div>
       )}
 

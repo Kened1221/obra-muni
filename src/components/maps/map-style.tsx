@@ -1,14 +1,12 @@
 "use client";
 
-import Map from "react-map-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
+import MapProvider from "../MapProvider";
 
 interface MapStylePreviewProps {
   styleUrl: string;
   name: string;
   isActive: boolean;
   onSelect: () => void;
-  defaultLocation: { latitude: number; longitude: number };
 }
 
 export default function MapStylePreview({
@@ -16,35 +14,28 @@ export default function MapStylePreview({
   name,
   isActive,
   onSelect,
-  defaultLocation,
 }: MapStylePreviewProps) {
-  const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
-  const previewViewState = {
-    latitude: defaultLocation.latitude,
-    longitude: defaultLocation.longitude,
-    zoom: 12,
-    bearing: 0,
-    pitch: 0,
+  const defaultLocation = {
+    latitude: -12.620094, 
+    longitude: -73.787079
   };
-
   return (
     <div
       onClick={onSelect}
       className={`border-${
         isActive ? "4" : "1"
       } border-blue-500 rounded-lg cursor-pointer`}
+      style={{ width: "100px", height: "100px", position: "relative" }}
     >
-      <div className="absolute px-2 text-center justify-center font-bold text-gray-900 z-10">
+      <MapProvider
+        defaultLocation={defaultLocation}
+        mapStyle={styleUrl}
+        width="100px"
+        height="100px"
+      />
+      <div className="absolute top-0 left-0 right-0 px-2 text-center font-bold text-gray-900 bg-white bg-opacity-75 rounded-sm">
         {name}
       </div>
-      <Map
-        mapboxAccessToken={token}
-        initialViewState={previewViewState}
-        mapStyle={styleUrl}
-        style={{ width: 150, height: 100 }}
-        attributionControl={false}
-        interactive={false}
-      />
     </div>
   );
 }

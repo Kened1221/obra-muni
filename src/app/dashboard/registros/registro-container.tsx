@@ -1,6 +1,6 @@
 "use client";
 
-import NewCoordinates from "@/components/views/register-Location";
+import NewCoordinatesMap from "@/components/maps/map-new-coordinates";
 import { useState } from "react";
 import ButtonSave from "@/components/buttons/dynamic/icons-save";
 import { guardarObra } from "@/actions/obras-actions";
@@ -26,6 +26,11 @@ function ObrasContainer() {
     presupuesto: "",
     obraType: "",
   });
+
+  const defaultLocation = {
+    latitude: -12.619648,
+    longitude: -73.789429,
+  };
 
   const [showConfirmationModal, setShowConfirmationModal] =
     useState<boolean>(false);
@@ -101,9 +106,10 @@ function ObrasContainer() {
       </div>
 
       <div className="rounded-3xl overflow-hidden w-full h-full shadow-lg">
-        <NewCoordinates
+        <NewCoordinatesMap
           setPoints={setPoints}
           setProjectTypestyle={setProjectType}
+          defaultLocation={defaultLocation}
         />
       </div>
 

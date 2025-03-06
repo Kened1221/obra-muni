@@ -19,6 +19,7 @@ export async function totalObrasRegistradas() {
       state: obra.state,
       propietario_id: obra.propietario_id,
       resident: obra.resident,
+      supervisor: obra.supervisor,
       projectType: obra.projectType,
       obraType: obra.obraType,
       cui: obra.cui,
