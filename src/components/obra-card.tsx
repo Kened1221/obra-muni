@@ -45,27 +45,33 @@ function ObraCard({ obra, setDefaultLocation }: obrasProsp) {
           className="cursor-pointer hover:text-primary"
         />
       </div>
-      <p className="text-secondary-foreground text-sm text-justify">
-        {obra.name}
-      </p>
-      <p className="text-secondary-foreground text-sm text-justify">
-        Tipo de proyecto: {obra.obraType}
-      </p>
-      <p className="text-secondary-foreground text-sm text-justify">
-        Tamaño Aproximado: {obra.areaOrLength}
-      </p>
-      <p className="text-secondary-foreground text-sm text-justify">
-        Estado: {obra.state}
-      </p>
-      <p className="text-secondary-foreground text-sm text-justify">
-        Supervisor: {obra.supervisor}
-      </p>
-      <p className="text-secondary-foreground text-sm text-justify">
-        Residente: {obra.resident}
-      </p>
-      <p className="text-secondary-foreground text-sm text-justify">
-        Finalización: {obra.fechaFinal}
-      </p>
+      <div className="text-secondary-foreground text-sm text-justify space-y-3 overflow-hidden">
+        <p>{obra.name}</p>
+        <div>
+          <strong>Tipo de proyecto:</strong>{" "}
+          <span className="dark:text-gray-300">{obra.obraType}</span>
+        </div>
+        <div>
+          <strong>Tamaño Aproximado:</strong>{" "}
+          <span className="dark:text-gray-300">{obra.areaOrLength}</span>
+        </div>
+        <div>
+          <strong>Supervisor:</strong>{" "}
+          <span className="dark:text-gray-300">{obra.supervisor}</span>
+        </div>
+        <div>
+          <strong>Residente:</strong>{" "}
+          <span className="dark:text-gray-300">{obra.resident}</span>
+        </div>
+        <div>
+          <strong>Estado:</strong>{" "}
+          <span className="dark:text-gray-300">{obra.state}</span>
+        </div>
+        <div>
+          <strong>Finalización:</strong>{" "}
+          <span className="dark:text-gray-300">{obra.fechaFinal}</span>
+        </div>
+      </div>
     </div>
   );
 }

@@ -18,6 +18,7 @@ import { updateUserResidentSchema } from "@/utils/zod/schemas";
 import { useState } from "react";
 import { Combobox } from "../select/combobox";
 import { createUsuario } from "@/actions/formulario-actions";
+import { useSession } from "next-auth/react";
 
 interface Obra {
   id: string;
@@ -45,6 +46,9 @@ export default function RegisterUsuario({
       id_propietario: "",
     },
   });
+
+  const { data: session } = useSession();
+
   const handleUpperCase = (
     e: React.ChangeEvent<HTMLInputElement>,
     fieldName: "userApellido" | "userNombre" | "id_propietario"
@@ -100,12 +104,21 @@ export default function RegisterUsuario({
       setIsSubmitting(false);
     }
   }
-
-  const optionIcon = [
+  const optionIconAdministrador = [
     { value: "residente", label: "Residente" },
     { value: "supervisor", label: "Supervisor" },
     { value: "cmunicipales", label: "Cargos municipales" },
   ];
+
+  const optionIconUser = [
+    { value: "residente", label: "Residente" },
+    { value: "supervisor", label: "Supervisor" },
+  ];
+
+  const optionIcon =
+    session?.user?.role === "administrador"
+      ? optionIconAdministrador
+      : optionIconUser;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

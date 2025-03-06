@@ -46,7 +46,8 @@ function SideDashboard({ totalObras, setDefaultLocation }: obrasProsp) {
         obra.areaOrLength.toLowerCase().includes(searchTerm) ||
         obra.cui.toLowerCase().includes(searchTerm) ||
         obra.supervisor?.toLowerCase().includes(searchTerm) ||
-        obra.resident?.toLowerCase().includes(searchTerm);
+        obra.resident?.toLowerCase().includes(searchTerm) ||
+        obra.fechaFinal.toLowerCase().includes(searchTerm);
       return matchesSearch;
     });
 

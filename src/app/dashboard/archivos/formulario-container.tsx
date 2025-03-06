@@ -49,7 +49,7 @@ interface Obra {
   fechaFinal: string;
 }
 
-export function FormularioContainer() {
+export default function FormularioContainer() {
   const [obras, setObras] = useState<Obra[]>([]);
   const [filtro, setFiltro] = useState<string>("");
   const [modalU, setModalU] = useState(false);
@@ -183,6 +183,7 @@ export function FormularioContainer() {
                 >
                   <FaUserPlus className="w-5 h-5" />
                 </Button>
+
                 <Button
                   className="bg-yellow-500 hover:bg-yellow-600 text-white"
                   size="icon"
@@ -320,10 +321,8 @@ export function FormularioContainer() {
         onClose={() => setModalDelete(false)}
         onConfirm={confirmacionDelete}
         title="¿Eliminar obra?"
-        description="Esta acción no se puede deshacer."
+        description="Una vez confirmada esta acción no se puedra deshacer."
       />
     </div>
   );
 }
-
-export default FormularioContainer;

@@ -45,7 +45,7 @@ export function ObraDetails({ obra }: ObraDetailsProps) {
           <span className="dark:text-gray-200">{obra.areaOrLength}</span>
         </div>
         <div>
-          <strong className="font-bold">Estado: </strong>{" "}
+          <strong className="font-bold">Estado: </strong>
           <span className="dark:text-gray-200">{obra.state}</span>
         </div>
         <div>
