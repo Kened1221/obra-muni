@@ -31,8 +31,6 @@ type CuentaContainerProps = {
 
 function SidebarOptions({ session }: CuentaContainerProps) {
   const pathname = usePathname();
-
-  // 🔹 Definir enlaces para cada rol
   const adminLinks = [
     {
       href: "/dashboard/registros",
@@ -131,6 +129,9 @@ function SidebarOptions({ session }: CuentaContainerProps) {
     }
   })();
 
+  console.log(session);
+
+
   return (
     <div className="flex flex-col gap-6 items-center">
       <TooltipProvider>
@@ -138,11 +139,10 @@ function SidebarOptions({ session }: CuentaContainerProps) {
           <Tooltip key={href}>
             <Link
               href={href}
-              className={`relative p-2 rounded-full ${
-                pathname === href
-                  ? "bg-[#CDCDCD] dark:bg-[#40404B] text-[#030303] dark:text-white"
-                  : "text-[#030303] dark:text-[#8E8EA8]"
-              } hover:text-[#8E8EA8] dark:hover:text-white`}
+              className={`relative p-2 rounded-full ${pathname === href
+                ? "bg-[#CDCDCD] dark:bg-[#40404B] text-[#030303] dark:text-white"
+                : "text-[#030303] dark:text-[#8E8EA8]"
+                } hover:text-[#8E8EA8] dark:hover:text-white`}
             >
               <TooltipTrigger className="absolute top-0 left-0 w-full h-full" />
               {icon}

@@ -11,8 +11,8 @@ import { ConfirmDialog } from "@/components/dialog/dialog-confirm";
 import { Button } from "@/components/buttons/button";
 
 interface Record {
-  propietario_id: string | null;
-  resident: string | null;
+  propietario_id: string;
+  resident: string;
   cui: string;
   name: string;
   count: number;
@@ -21,6 +21,7 @@ interface Record {
 interface UploadImagesProps {
   record: Record[];
   setModal: (setModal: boolean) => void;
+  refreshData: () => void;
 }
 
 interface OptionProps {
@@ -28,7 +29,7 @@ interface OptionProps {
   label: string;
 }
 
-export default function FormImage({ record, setModal }: UploadImagesProps) {
+export default function FormImage({ record, setModal, refreshData }: UploadImagesProps) {
   const [editedImg, setEditedImg] = useState<File | null>(null);
   const [fecha, setFecha] = useState<Date | undefined>(undefined);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
@@ -61,8 +62,8 @@ export default function FormImage({ record, setModal }: UploadImagesProps) {
     const formData = new FormData();
     formData.append("file", file);
 
-    const filePath = await saveFile(file);
-    return filePath;
+    const fileName = await saveFile(file);
+    return fileName;
   }
 
   const handleConfirmSave = async () => {
@@ -74,13 +75,17 @@ export default function FormImage({ record, setModal }: UploadImagesProps) {
       return;
     }
 
-    try {
-      await handleFileUpload(editedImg);
+    if (!obraSeleccionada?.propietario_id) {
+      toasterCustom(400, "El propietario_id no está disponible.");
+      return;
+    }
 
+    try {
+      const uploadedFileName = await handleFileUpload(editedImg);
       const response = await guardarImg(
-        `${process.env.NEXT_PUBLIC_URL}/api/uploads/${editedImg.name}`,
-        obraSeleccionada?.propietario_id ?? "",
-        obraSeleccionada!.cui,
+        `${process.env.NEXT_PUBLIC_URL}/api/uploads/${uploadedFileName}`,
+        obraSeleccionada?.propietario_id,
+        obraSeleccionada?.cui,
         fecha.toISOString()
       );
 
@@ -90,9 +95,7 @@ export default function FormImage({ record, setModal }: UploadImagesProps) {
       closeModal();
 
       if (response.status === 200) {
-        setTimeout(() => {
-          window.location.reload();
-        }, 0);
+        await refreshData();
       }
     } catch {
       toasterCustom(404, "Error al guardar la imagen");
@@ -139,7 +142,7 @@ export default function FormImage({ record, setModal }: UploadImagesProps) {
       </div>
 
       <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
-        <CalendarForm fecha={setFecha} type="anterior" />
+        <CalendarForm fecha={setFecha} />
         <DragDropImgInput img={editedImg} setImg={setEditedImg} />
       </div>
 

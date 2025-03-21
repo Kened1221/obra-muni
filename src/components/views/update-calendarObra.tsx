@@ -14,6 +14,7 @@ interface CalendarObraProps {
   setModalFecha: (value: boolean) => void;
   id: string;
   fecha: string;
+  refreshData: () => void;
 }
 
 interface DateFinal {
@@ -22,8 +23,8 @@ interface DateFinal {
   porcentaje: number;
 }
 
-function CalendarObra({ setModalFecha, id, fecha }: CalendarObraProps) {
-  const [day, setDay] = useState<string>("");
+function CalendarObra({ setModalFecha, id, fecha, refreshData }: CalendarObraProps) {
+  const [day, setDay] = useState<string>(""); // Explicitly typed as string
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [date, setDate] = useState<DateFinal | null>(null);
@@ -63,24 +64,26 @@ function CalendarObra({ setModalFecha, id, fecha }: CalendarObraProps) {
     if (!day) return;
     setIsLoading(true);
     try {
-      const fechaFinal = new Date(day);
+      const fechaFinal: Date = new Date(day);
+      if (isNaN(fechaFinal.getTime())) {
+        throw new Error("Fecha inválida");
+      }
       const response = await ActualizarCalendarObra(id, fechaFinal);
       if (response.status === 200) {
         toasterCustom(response.status, response.message);
         setShowConfirmationModal(false);
         setModalFecha(false);
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
+        await refreshData();
       } else {
         toasterCustom(response.status, response.message);
       }
-    } catch {
+    } catch (error) {
       toasterCustom(500, "Ocurrió un error al actualizar la fecha de la obra.");
+      console.error(error);
     } finally {
       setIsLoading(false);
     }
-  }, [day, id, setModalFecha]);
+  }, [day, id, setModalFecha, refreshData]);
 
   const closeModal = useCallback(() => {
     setModalFecha(false);
@@ -117,10 +120,13 @@ function CalendarObra({ setModalFecha, id, fecha }: CalendarObraProps) {
     }
   }, [date]);
 
+  // Convert the fecha string to a Date object
+  const fechaAsDate = new Date(fecha);
+
   return (
     <div className="bg-background p-6 rounded-lg w-full sm:w-3/4 lg:w-1/2 max-w-sm sm:max-w-lg space-y-6 px-4 z-20">
       <div className="dark:bg-gray-800 bg-slate-200 rounded-3xl">
-        <CalendarCustom Daysworked={[fecha + "T00:00"]} setDay={setDay} />
+        <CalendarCustom Daysworked={[fechaAsDate]} setDay={setDay} />
       </div>
       <div className="flex justify-center space-x-8">
         <Button

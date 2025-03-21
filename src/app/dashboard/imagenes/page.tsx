@@ -1,61 +1,45 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import RegistrosContainer from "./registros-container";
+import { useEffect, useState } from "react";
 import { getCooImg } from "@/actions/register-action";
 import UploadImages from "./UploadImages";
 
 interface Record {
-  propietario_id: string | null;
-  resident: string | null;
+  propietario_id: string;
+  resident: string;
   cui: string;
   name: string;
   count: number;
 }
-
 export const dynamic = "force-dynamic";
 
-function Page() {
+export default function Page() {
   const [record, setRecord] = useState<Record[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+
+  const fetchRecords = async () => {
+    const data = await getCooImg();
+    setRecord(data);
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getCooImg();
-        setRecord(data);
-      } catch (error) {
-        console.error("Error al obtener registros:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
+    fetchRecords();
   }, []);
 
   return (
     <main className="grid w-full items-center justify-center gap-4">
       <div>
-        <UploadImages record={record} />
+        <UploadImages record={record} refreshData={fetchRecords} />
       </div>
       <div>
-        {loading ? (
-          <p className="text-lg text-gray-600 dark:text-gray-400 text-center">
-            Cargando registros...
-          </p>
-        ) : record.length === 0 ? (
-          <p className="text-lg text-gray-600 dark:text-gray-400 text-center">
-            No tienes registros en este momento...
-          </p>
-        ) : (
-          <section className="w-full mx-auto">
+        {record.length > 0 ? (
+          <section>
             <RegistrosContainer registros={record} />
           </section>
+        ) : (
+          <p>No hay registros</p>
         )}
       </div>
     </main>
   );
 }
-
-export default Page;

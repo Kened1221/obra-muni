@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import { Combobox } from "@/components/select/combobox";
 import {
   Form,
@@ -27,13 +26,15 @@ interface WorkData {
 }
 
 interface FormularioRegisterObraProps {
-  setworkData: React.Dispatch<React.SetStateAction<WorkData>>;
+  setWorkData: React.Dispatch<React.SetStateAction<WorkData>>;
   workData: WorkData;
+  setFormResetFn?: React.Dispatch<React.SetStateAction<(() => void) | null>>;
 }
 
 export default function FormularioRegisterObra({
-  setworkData,
+  setWorkData,
   workData,
+  setFormResetFn,
 }: FormularioRegisterObraProps) {
   const [obraType, setObraType] = useState<string>(workData.obraType || "");
 
@@ -42,31 +43,23 @@ export default function FormularioRegisterObra({
     defaultValues: workData,
   });
 
+  // Set up the reset function
+  useEffect(() => {
+    if (setFormResetFn) {
+      setFormResetFn(() => () => form.reset());
+    }
+  }, [form, setFormResetFn]);
+
+  // Sincronizar el formulario con workData cuando cambie
+  useEffect(() => {
+    form.reset(workData);
+    setObraType(workData.obraType || "");
+  }, [workData, form]);
+
   const optionIcon = [
     { value: "Acueducto", label: "Acueducto" },
     { value: "Aeropuerto", label: "Aeropuerto" },
     { value: "Almacen", label: "Almacén" },
-    { value: "Canal", label: "Canal" },
-    { value: "Carretera", label: "Carretera" },
-    { value: "Clinica", label: "Clínica" },
-    { value: "Cultural", label: "Cultural" },
-    { value: "Deposito", label: "Depósito" },
-    { value: "Edificio", label: "Edificio" },
-    { value: "Embalse", label: "Embalse" },
-    { value: "Escuela", label: "Escuela" },
-    { value: "Estadio", label: "Estadio" },
-    { value: "Fabrica", label: "Fábrica" },
-    { value: "Ferrocarril", label: "Ferrocarril" },
-    { value: "Hospital", label: "Hospital" },
-    { value: "Infraestructura sanitaria", label: "Infraestructura sanitaria" },
-    { value: "Mercado", label: "Mercado" },
-    { value: "Parque", label: "Parque" },
-    { value: "Planta", label: "Planta" },
-    { value: "Puente", label: "Puente" },
-    { value: "Puerto", label: "Puerto" },
-    { value: "Represa", label: "Represa" },
-    { value: "Terminal de transporte", label: "Terminal de transporte" },
-    { value: "Tunel", label: "Túnel" },
     { value: "Universidad", label: "Universidad" },
   ];
 
@@ -91,7 +84,7 @@ export default function FormularioRegisterObra({
                           .replace(/\D/g, "")
                           .slice(0, 7);
                         field.onChange(value);
-                        setworkData((prev) => ({ ...prev, cui: value }));
+                        setWorkData((prev) => ({ ...prev, cui: value }));
                       }}
                     />
                   </FormControl>
@@ -113,7 +106,7 @@ export default function FormularioRegisterObra({
                       onChange={(e) => {
                         const value = e.target.value.replace(/\D/g, "");
                         field.onChange(value);
-                        setworkData((prev) => ({
+                        setWorkData((prev) => ({
                           ...prev,
                           presupuesto: value,
                         }));
@@ -128,7 +121,7 @@ export default function FormularioRegisterObra({
             <CalendarForm
               fecha={(date: Date | undefined) => {
                 if (date) {
-                  setworkData((prev) => ({ ...prev, fecha: date }));
+                  setWorkData((prev) => ({ ...prev, fecha: date }));
                 }
               }}
               type="posterior"
@@ -139,7 +132,7 @@ export default function FormularioRegisterObra({
               options={optionIcon}
               onChange={(value) => {
                 setObraType(value || "");
-                setworkData((prev) => ({ ...prev, obraType: value || "" }));
+                setWorkData((prev) => ({ ...prev, obraType: value || "" }));
               }}
               value={obraType}
             />
@@ -159,7 +152,7 @@ export default function FormularioRegisterObra({
                       onChange={(e) => {
                         const value = e.target.value.toUpperCase();
                         field.onChange(value);
-                        setworkData((prev) => ({ ...prev, nombreObra: value }));
+                        setWorkData((prev) => ({ ...prev, nombreObra: value }));
                       }}
                     />
                   </FormControl>

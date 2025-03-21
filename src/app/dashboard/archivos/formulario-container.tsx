@@ -72,25 +72,26 @@ export default function FormularioContainer() {
   });
 
   const [modalFecha, setModalFecha] = useState<boolean>(false);
+
+  const fetchData = async () => {
+    try {
+      const data = await getObras();
+
+      setObras(
+        data.map((obra) => ({
+          ...obra,
+          propietario_id: obra.propietario_id ?? "",
+          resident: obra.resident || "No asignado",
+          supervisor: obra.supervisor || "No asignado",
+          fechaFinal: new Date(obra.fechaFinal).toISOString().split("T")[0],
+        }))
+      );
+    } catch (error) {
+      console.error("Error obteniendo obras:", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getObras();
-
-        setObras(
-          data.map((obra) => ({
-            ...obra,
-            propietario_id: obra.propietario_id ?? "",
-            resident: obra.resident || "No asignado",
-            supervisor: obra.supervisor || "No asignado",
-            fechaFinal: new Date(obra.fechaFinal).toISOString().split("T")[0],
-          }))
-        );
-      } catch (error) {
-        console.error("Error obteniendo obras:", error);
-      }
-    };
-
     fetchData();
   }, []);
 
@@ -250,9 +251,9 @@ export default function FormularioContainer() {
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
                   ))}
                 </TableRow>
@@ -289,7 +290,7 @@ export default function FormularioContainer() {
 
       {modalU && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <RegisterUsuario obra={obraSeleccionada} setModalU={setModalU} />
+          <RegisterUsuario obra={obraSeleccionada} setModalU={setModalU} refreshData={fetchData}/>
         </div>
       )}
 
@@ -302,6 +303,7 @@ export default function FormularioContainer() {
               obraSeleccionada.projectType
             )}
             setNodal={setModalE}
+            refreshData={fetchData}
           />
         </div>
       )}
@@ -312,6 +314,7 @@ export default function FormularioContainer() {
             id={idData}
             fecha={obraSeleccionada.fechaFinal}
             setModalFecha={setModalFecha}
+            refreshData={fetchData}
           />
         </div>
       )}

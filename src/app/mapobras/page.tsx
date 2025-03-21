@@ -32,8 +32,8 @@ interface UserLocation {
 function Obras() {
   const [queryResult, setQueryResult] = useState<any[]>([]);
   const [defaultLocation, setDefaultLocation] = useState<UserLocation>({
-    latitude: -12.619648,
-    longitude: -73.789429,
+    latitude: -12.046451,
+    longitude: -77.043167,
   });
 
   useEffect(() => {

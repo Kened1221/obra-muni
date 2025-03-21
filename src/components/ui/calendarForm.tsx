@@ -4,7 +4,6 @@ import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/buttons/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -31,7 +30,7 @@ const FormSchema = z.object({
 
 interface CalendarFormProps {
   fecha: (date: Date | undefined) => void;
-  type: "all" | "posterior" | "anterior";
+  type?: "anterior" | "posterior"; // Optional prop to control date restriction
 }
 
 export function CalendarForm({ fecha, type }: CalendarFormProps) {
@@ -45,40 +44,24 @@ export function CalendarForm({ fecha, type }: CalendarFormProps) {
     }
   };
 
-  const isDateDisabled = (date: Date) => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    if (type === "all") {
-      return false;
-    }
-    if (type === "posterior") {
-      return date < today;
-    }
-    if (type === "anterior") {
-      return date > today;
-    }
-    return false;
-  };
+  const today = new Date();
 
   return (
     <Form {...form}>
-      <form className="space-y-6">
+      <form className="space-y-8">
         <FormField
           control={form.control}
           name="dob"
           render={({ field }) => (
-            <FormItem className="flex flex-col gap-1">
-              <FormLabel className="text-sm font-medium leading-none mt-1 peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                Elige una fecha
-              </FormLabel>
+            <FormItem className="flex flex-col">
+              <FormLabel>Elige una fecha</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>
                     <Button
                       variant={"outline"}
                       className={cn(
-                        "flex w-full min-w-[200px] pl-3 text-left font-normal border-border",
+                        "w-[240px] pl-3 text-left font-normal border-radius",
                         !field.value && "text-muted-foreground"
                       )}
                     >
@@ -99,7 +82,13 @@ export function CalendarForm({ fecha, type }: CalendarFormProps) {
                       field.onChange(date);
                       handleDateChange(date);
                     }}
-                    disabled={isDateDisabled}
+                    disabled={(date) =>
+                      type === "posterior"
+                        ? date < today // Disable past dates
+                        : type === "anterior"
+                        ? date > today // Disable future dates
+                        : date < new Date("2020-01-01") // Default restriction
+                    }
                     initialFocus
                   />
                 </PopoverContent>

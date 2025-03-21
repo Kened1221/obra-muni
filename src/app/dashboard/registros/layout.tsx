@@ -4,6 +4,9 @@ import Page from "./page";
 export default async function ServerWrapper() {
   const session = await auth();
 
+  console.log(session);
+
+
   const allowedRoles = ["administrador", "cmunicipales"];
 
   if (!session?.user?.role || !allowedRoles.includes(session.user.role)) {

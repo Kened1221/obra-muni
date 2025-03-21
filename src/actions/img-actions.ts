@@ -17,14 +17,9 @@ export async function getDaysWorked(cui: string) {
       latitud: resul.latitud,
       longitud: resul.longitud,
       propietario_id: resul.propietario_id,
-      date: (() => {
-        const date = new Date(resul.date);
-        const formattedDate = date.toISOString().split("T");
-        const datePart = formattedDate[0];
-        const timePart = formattedDate[1].substring(0, 5);
-        return `${datePart}T${timePart}`;
-      })(),
+      date: resul.date,
     }));
+    
     return diasTrabajados;
   } catch (error) {
     console.error("Error al buscar las imagenes:", error);

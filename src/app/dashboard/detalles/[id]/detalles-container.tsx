@@ -6,19 +6,22 @@ interface obra {
   state: string;
   propietario_id: string | null;
   resident: string | null;
-  supervisor: string | null;
   projectType: string;
   obraType: string;
   cui: string;
   name: string;
   presupuesto: string;
   areaOrLength: string;
-  points: [number, number][];
   fechaFinal: string;
   porcentaje: number;
+  points: [number, number][];
+}
+interface DetallesContainerProps {
+  obraDetalles: obra;
 }
 
-function DetallesContainer({ obraDetalles }: { obraDetalles: obra }) {
+function DetallesContainer({ obraDetalles }: DetallesContainerProps) {
+
   const mapDetails = {
     id: obraDetalles.id,
     state: obraDetalles.state,
@@ -40,6 +43,8 @@ function DetallesContainer({ obraDetalles }: { obraDetalles: obra }) {
     fechaFinal: obraDetalles.fechaFinal,
     porcentaje: obraDetalles.porcentaje,
   };
+
+
 
   return (
     <div className="grid grid-rows-2 h-full w-full gap-y-4">

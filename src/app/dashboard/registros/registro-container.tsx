@@ -1,7 +1,7 @@
 "use client";
 
-import NewCoordinatesMap from "@/components/maps/map-new-coordinates";
 import { useState } from "react";
+import NewCoordinatesMap from "@/components/maps/map-new-coordinates";
 import ButtonSave from "@/components/buttons/dynamic/icons-save";
 import { guardarObra } from "@/actions/obras-actions";
 import toasterCustom from "@/components/toaster-custom";
@@ -13,7 +13,7 @@ import FormularioRegisterObra from "@/components/forms/form-obra";
 function ObrasContainer() {
   const [points, setPoints] = useState<[number, number][]>([]);
   const [projectType, setProjectType] = useState<string>("");
-  const [workData, setworkData] = useState<{
+  const [workData, setWorkData] = useState<{
     cui: string;
     nombreObra: string;
     fecha: Date | null;
@@ -28,12 +28,14 @@ function ObrasContainer() {
   });
 
   const defaultLocation = {
-    latitude: -12.619648,
-    longitude: -73.789429,
+    latitude: -12.046451,
+    longitude: -77.043167,
   };
 
   const [showConfirmationModal, setShowConfirmationModal] =
     useState<boolean>(false);
+  // Store the form reset function
+  const [formResetFn, setFormResetFn] = useState<(() => void) | null>(null);
 
   const handleSaveClick = async () => {
     if (
@@ -66,6 +68,8 @@ function ObrasContainer() {
   const handleCloseConfirmationModal = () => setShowConfirmationModal(false);
 
   const handleConfirmSave = async () => {
+    if (!formResetFn) return;
+
     const areaOrLength = medidaTotal(points, projectType);
     try {
       const data = await guardarObra(projectType, points, areaOrLength, {
@@ -83,9 +87,16 @@ function ObrasContainer() {
       handleCloseConfirmationModal();
 
       if (data.status === 200) {
-        setTimeout(() => {
-          window.location.reload();
-        }, 0);
+        setPoints([]);
+        setProjectType("");
+        setWorkData({
+          cui: "",
+          nombreObra: "",
+          fecha: null,
+          presupuesto: "",
+          obraType: "",
+        });
+        formResetFn(); // Call the stored reset function
       }
     } catch {
       toasterCustom(500, "Error al procesar la solicitud.");
@@ -97,8 +108,9 @@ function ObrasContainer() {
       <div className="grid sm:grid-row-1 md:grid-cols-[1fr_auto] items-center gap-4">
         <div className="h-full">
           <FormularioRegisterObra
-            setworkData={setworkData}
+            setWorkData={setWorkData}
             workData={workData}
+            setFormResetFn={setFormResetFn} // Pass setter for reset function
           />
         </div>
 
@@ -107,6 +119,7 @@ function ObrasContainer() {
 
       <div className="rounded-3xl overflow-hidden w-full h-full shadow-lg">
         <NewCoordinatesMap
+          points={points}
           setPoints={setPoints}
           setProjectTypestyle={setProjectType}
           defaultLocation={defaultLocation}

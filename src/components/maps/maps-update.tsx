@@ -31,6 +31,7 @@ interface ObraUpdateProps {
   obra: Obra;
   coordinates: Location;
   setNodal: (value: boolean) => void;
+  refreshData: () => void;
 }
 
 // Componente hijo para manejar el renderizado condicional de las capas
@@ -75,7 +76,7 @@ function MapContent({
   );
 }
 
-function MapsUpdate({ obra, coordinates, setNodal }: ObraUpdateProps) {
+function MapsUpdate({ obra, coordinates, setNodal, refreshData }: ObraUpdateProps) {
   const [points, setPoints] = useState<[number, number][]>(obra.points);
   const [projectType, setProjectType] = useState<string>(obra.projectType);
   const [polygonData, setPolygonData] = useState<Feature<Polygon> | null>(null);
@@ -105,8 +106,7 @@ function MapsUpdate({ obra, coordinates, setNodal }: ObraUpdateProps) {
       if (points.length < (projectType === "Superficie" ? 3 : 2)) {
         toasterCustom(
           400,
-          `Se requieren al menos ${
-            projectType === "Superficie" ? 3 : 2
+          `Se requieren al menos ${projectType === "Superficie" ? 3 : 2
           } puntos.`
         );
         return;
@@ -169,7 +169,7 @@ function MapsUpdate({ obra, coordinates, setNodal }: ObraUpdateProps) {
 
       if (data.status === 200) {
         setNodal(false);
-        window.location.reload();
+        await refreshData()
       }
     } catch {
       toasterCustom(500, "Error al guardar los datos.");

@@ -29,11 +29,14 @@ interface Obra {
 interface ResidentUpdateProps {
   obra: Obra;
   setModalU: (value: boolean) => void;
+  refreshData: () => void;
+
 }
 
 export default function RegisterUsuario({
   obra,
   setModalU,
+  refreshData,
 }: ResidentUpdateProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [role, setRole] = useState("");
@@ -87,10 +90,7 @@ export default function RegisterUsuario({
 
       if (result.status === 200) {
         toasterCustom(result.status, "Usuario registrado correctamente");
-        setTimeout(() => {
-          closeModal();
-          window.location.reload();
-        }, 500);
+        await refreshData()
       } else {
         toasterCustom(
           result.status,
