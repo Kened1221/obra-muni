@@ -18,7 +18,7 @@ export async function getCooImg() {
         },
       },
       select: {
-        propietario_id: true,
+        cui: true,
         date: true,
       },
     });
@@ -37,20 +37,19 @@ export async function getCooImg() {
 
     const propietarioCount = imagesToday.reduce(
       (acc: { [key: string]: number }, image) => {
-        const { propietario_id } = image;
-        if (propietario_id !== null) {
-          acc[propietario_id] = (acc[propietario_id] || 0) + 1;
-        }
+        const propietarioKey = image.cui ?? "unknown";
+        acc[propietarioKey] = (acc[propietarioKey] || 0) + 1;
         return acc;
       },
       {}
     );
 
     const result = coordinatesToday.map((coord) => {
-      const count = propietarioCount[coord.propietario_id ?? ""] || 0;
+      const propietarioKey = coord.cui ?? "unknown";
+      const count = propietarioCount[propietarioKey] || 0;
       return {
-        propietario_id: coord.propietario_id ?? "", // Default to empty string if null
-        resident: coord.resident ?? "",             // Default to empty string if null
+        propietario_id: coord.propietario_id,
+        resident: coord.resident,
         cui: coord.cui,
         name: coord.name,
         count,

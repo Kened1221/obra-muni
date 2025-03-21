@@ -12,6 +12,7 @@ interface Record {
   name: string;
   count: number;
 }
+
 export const dynamic = "force-dynamic";
 
 export default function Page() {
@@ -19,7 +20,13 @@ export default function Page() {
 
   const fetchRecords = async () => {
     const data = await getCooImg();
-    setRecord(data);
+    // Transform the data to ensure no null values
+    const transformedData = data.map((item) => ({
+      ...item,
+      propietario_id: item.propietario_id ?? "", // Convert null to empty string
+      resident: item.resident ?? "",             // Convert null to empty string
+    }));
+    setRecord(transformedData);
   };
 
   useEffect(() => {
@@ -27,7 +34,7 @@ export default function Page() {
   }, []);
 
   return (
-    <main className="grid w-full items-center justify-center gap-4">
+    <main className="grid w-full items-start justify-center gap-4">
       <div>
         <UploadImages record={record} refreshData={fetchRecords} />
       </div>

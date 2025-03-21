@@ -75,19 +75,14 @@ export default function FormImage({ record, setModal, refreshData }: UploadImage
       return;
     }
 
-    if (!obraSeleccionada?.propietario_id) {
-      toasterCustom(400, "El propietario_id no está disponible.");
-      return;
-    }
-
     try {
       const uploadedFileName = await handleFileUpload(editedImg);
       const response = await guardarImg(
         `${process.env.NEXT_PUBLIC_URL}/api/uploads/${uploadedFileName}`,
-        obraSeleccionada?.propietario_id,
-        obraSeleccionada?.cui,
+        obraSeleccionada?.propietario_id ?? "",
+        obraSeleccionada!.cui,
         fecha.toISOString()
-      );
+      );  
 
       toasterCustom(response.status, response.message);
 
