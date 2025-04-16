@@ -94,8 +94,8 @@ function ImageDetalles({
           </button>
         </div>
       ) : (
-        <div>
-          <div className="bg-white dark:bg-background px-6 rounded-lg shadow-lg w-full h-full overflow-y-auto relative">
+        <div className="w-full h-full flex items-center justify-center">
+          <div className="flex flex-col dark:bg-background px-6 rounded-lg shadow-lg w-full h-full overflow-y-auto relative">
             <button
               onClick={closeModal}
               aria-label="Cerrar modal"
@@ -106,12 +106,12 @@ function ImageDetalles({
             <h2 className="text-xl text-center font-semibold text-gray-800 dark:text-gray-200 pt-4">
               Detalles de la Imagen
             </h2>
-            <div className="flex flex-col md:flex-row gap-4 p-4">
-              <div className="w-full">
+            <div className="flex flex-col items-center justify-center w-full h-full md:flex-row gap-4 p-4">
+              <div className="h-full">
                 <img
                   src={selectedImage.url}
                   alt={selectedImage.id}
-                  className="w-full h-full max-w-6xl max-h-6xl object-cover rounded-lg"
+                  className="w-full h-full  object-cover rounded-lg"
                 />
               </div>
             </div>
